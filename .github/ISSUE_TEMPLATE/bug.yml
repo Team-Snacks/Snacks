@@ -1,0 +1,13 @@
+name: 버그 리포트
+description: 버그 발생 시 발행할 이슈.
+labels: ["버그"]
+
+body:
+  - type: textarea
+    attributes:
+      label: 현재 상황
+      description: 현재 발생한 버그에 대해 설명 (필요에 따라 스크린샷 or gif 첨부)
+  - type: textarea
+    attributes:
+      label: 목표 상황
+      description: 버그를 해결한 후 기대되는 작동에 대해 설명.

@@ -1,0 +1,13 @@
+name: 코드 개선
+description: 코드 리팩토링, 성능 개선 등의 **코드** 개선 시 발행할 이슈.
+labels: ["코드 개선"]
+
+body:
+  - type: textarea
+    attributes:
+      label: 현재 상황
+      description: 현재 개선이 필요한 코드에 대해 설명. (개선이 필요한 부분, 이유 등..)
+  - type: textarea
+    attributes:
+      label: 목표 상황
+      description: 개선 시 기대되는 점에 대해 설명.
