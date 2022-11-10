@@ -1,7 +1,7 @@
-import { Hello } from './hello.stories'
+import { Hello } from './hello'
 
 function App() {
-  return <Hello />
+  return <Hello name='world' />
 }
 
 export default App
