@@ -1,0 +1,16 @@
+name: PR에 라벨 추가
+
+on:
+  pull_request_target:
+
+jobs:
+  triage:
+    name: PR에 라벨 추가하기
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+    - uses: actions/labeler@v4.0.2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}

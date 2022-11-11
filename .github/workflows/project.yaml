@@ -1,4 +1,4 @@
-name: Add issues and pull requests to project
+name: 프로젝트에 추가
 
 on:
   issues:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   add-to-project:
-    name: Add issue to project
+    name: 프로젝트에 추가하기
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/add-to-project@v0.3.0
