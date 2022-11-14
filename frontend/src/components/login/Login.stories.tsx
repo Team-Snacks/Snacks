@@ -1,7 +1,6 @@
 import { Button, Paper, Stack, Text } from '@mantine/core'
 import { Logo } from '../common'
 import { CredentialInput } from './CredentialInput.stories'
-import { GoogleIcon } from 'assets/GoogleIcon'
 
 export const Login = () => (
   <>
@@ -20,7 +19,7 @@ export const TryRegister = () => (
 export const OAuthLogin = () => (
   <>
     <Text>또는</Text>
-    <Button variant='default' leftIcon={<GoogleIcon />}>
+    <Button variant='default'>
       구글 이메일로 로그인
     </Button>
   </>
