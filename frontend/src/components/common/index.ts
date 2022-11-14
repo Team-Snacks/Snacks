@@ -1,2 +1,1 @@
-export * from './logo'
-export * from './hello'
+export * from './Logo.stories'
