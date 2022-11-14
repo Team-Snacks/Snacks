@@ -1,5 +1,5 @@
-import { Hello } from 'components/common'
+import { Text } from '@mantine/core'
 
 export const App = () => {
-  return <Hello name='world!!!' />
+  return <Text>Hello World!</Text>
 }
