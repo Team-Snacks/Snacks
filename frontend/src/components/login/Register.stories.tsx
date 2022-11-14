@@ -23,6 +23,7 @@ export const RegisterPanel = () => {
     <Paper>
       <Stack align='center'>
         <Logo />
+        <Register />
         <OAuthRegister />
       </Stack>
     </Paper>
