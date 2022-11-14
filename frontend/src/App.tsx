@@ -1,7 +1,5 @@
-import { Hello } from './hello'
+import { Hello } from 'components/common'
 
-function App() {
-  return <Hello name='world' />
+export const App = () => {
+  return <Hello name='world!!!' />
 }
-
-export default App
