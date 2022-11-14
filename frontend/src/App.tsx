@@ -1,5 +1,5 @@
-import { Hello } from 'components/common'
-import { Users } from 'components/users/users'
+import { Hello } from 'components/common/Index'
+import { Users } from 'components/users/Users'
 
 export const App = () => {
   return <Users />

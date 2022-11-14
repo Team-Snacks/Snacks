@@ -1,6 +1,6 @@
 import type { Story } from '@ladle/react'
-import { Hello } from './hello'
-import { Logo } from './logo'
+import { Hello } from './Hello'
+import { Logo } from './Logo'
 
 export const HelloStory: Story<{ name: string }> = ({ name }) => (
   <Hello name={name} />

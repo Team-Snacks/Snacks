@@ -1,5 +1,5 @@
 import { Button, Navbar } from '@mantine/core'
-import { storeAtom } from 'atoms'
+import { storeAtom } from 'Atoms'
 import { useAtom } from 'jotai'
 
 export const Store = () => {

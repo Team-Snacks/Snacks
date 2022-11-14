@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core'
-import { Logo } from 'components/common'
-import { storeAtom } from 'atoms'
+import { Logo } from 'components/common/Index'
+import { storeAtom } from 'Atoms'
 import { useSetAtom } from 'jotai'
 
 export const Navi = () => {
