@@ -1,6 +1,6 @@
 import { Grid } from './grid'
 import { Navi } from './navi'
-import { Store } from './Store'
+import { Store } from './store'
 
 export const Users = () => {
   return (
