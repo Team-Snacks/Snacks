@@ -1,5 +1,5 @@
-import { Text } from '@mantine/core'
+import { Users } from 'components/users/Users'
 
 export const App = () => {
-  return <Text>Hello World!</Text>
+  return <Users />
 }
