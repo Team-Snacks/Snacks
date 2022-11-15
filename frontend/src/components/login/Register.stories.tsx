@@ -1,6 +1,6 @@
 import { Button, Paper, Stack, Text } from '@mantine/core'
 import { Logo } from '../common'
-import { CredentialInput } from './CredentialInput.stories'
+import { CredentialInput } from './CredentialInput'
 
 export const Register = () => {
   return (
