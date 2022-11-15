@@ -1,10 +1,10 @@
 import { Button } from '@mantine/core'
 import { Logo } from 'components/common'
-import { storeAtom } from 'Atoms'
+import { storeVisibleAtom } from 'Atoms'
 import { useSetAtom } from 'jotai'
 
-export const Navi = () => {
-  const setStoreVisible = useSetAtom(storeAtom)
+export const Navigation = () => {
+  const setStoreVisible = useSetAtom(storeVisibleAtom)
   const tmpStyle: React.CSSProperties = { background: '#aaffff' }
 
   return (

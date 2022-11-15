@@ -1,9 +1,9 @@
 import { Button, Navbar } from '@mantine/core'
-import { storeAtom } from 'Atoms'
+import { storeVisibleAtom } from 'Atoms'
 import { useAtom } from 'jotai'
 
 export const Store = () => {
-  const [storeVisible, setStoreVisible] = useAtom(storeAtom)
+  const [storeVisible, setStoreVisible] = useAtom(storeVisibleAtom)
   const tmpStyle: React.CSSProperties = {
     background: '#ffffaa',
     width: '250px',

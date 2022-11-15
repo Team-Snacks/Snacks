@@ -1,6 +1,6 @@
 import { layoutType } from 'common'
 import { Grid } from './Grid'
-import { Navi } from './Navi'
+import { Navigation } from './Navigation'
 import { Store } from './Store'
 
 const dummy: layoutType = [
@@ -72,7 +72,7 @@ const dummy: layoutType = [
 export const Users = () => {
   return (
     <div>
-      <Navi />
+      <Navigation />
       <Store />
       <Grid gridItems={dummy} />
     </div>
