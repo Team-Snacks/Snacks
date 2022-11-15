@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@dnd-kit/core': ^6.0.5
   '@dnd-kit/sortable': ^7.0.1
+  '@dnd-kit/utilities': ^3.2.0
   '@emotion/react': ^11.10.5
   '@ladle/react': ^2.4.5
   '@mantine/core': ^5.7.1
@@ -22,6 +23,7 @@ specifiers:
 dependencies:
   '@dnd-kit/core': 6.0.5_biqbaboplfbrettd7655fr4n2y
   '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
+  '@dnd-kit/utilities': 3.2.0_react@18.2.0
   '@emotion/react': 11.10.5_fan5qbzahqtxlm5dzefqlqx5ia
   '@ladle/react': 2.4.5_biqbaboplfbrettd7655fr4n2y
   '@mantine/core': 5.7.1_etrvyeh76ry4n4cxjc37hheh7y
