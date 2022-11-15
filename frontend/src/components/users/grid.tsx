@@ -1,7 +1,7 @@
 import { DndContext } from '@dnd-kit/core'
 import { rectSwappingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { Widget } from 'components/widgets/Widget'
-import { layoutType } from 'Types'
+import { layoutType } from 'common'
 
 export const Grid = ({ gridItems }: { gridItems: layoutType }) => {
   const tmpStyle: React.CSSProperties = {

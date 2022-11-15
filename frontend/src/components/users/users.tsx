@@ -1,4 +1,4 @@
-import { layoutType } from 'Types'
+import { layoutType } from 'common'
 import { Grid } from './Grid'
 import { Navi } from './Navi'
 import { Store } from './Store'

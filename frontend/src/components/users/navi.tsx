@@ -1,5 +1,5 @@
 import { Button } from '@mantine/core'
-import { Logo } from 'components/common/Index'
+import { Logo } from 'components/common'
 import { storeAtom } from 'Atoms'
 import { useSetAtom } from 'jotai'
 

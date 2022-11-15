@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { layoutType, widgetType } from 'Types'
+import { layoutType, widgetType } from 'common'
 import { Weather } from './Weather'
 
 export const Widget = ({
