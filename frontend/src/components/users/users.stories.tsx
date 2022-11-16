@@ -4,72 +4,8 @@ import { Grid } from './Grid'
 import { Navigation as tmp } from './Navigation'
 import type { Story } from '@ladle/react'
 import React from 'react'
+import { layoutDummy } from 'Dummy'
 
-const dummy: layoutType = [
-  {
-    uuid: '1',
-    name: 'weather',
-    x: 0,
-    y: 0,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: '2',
-    name: 'memo',
-    x: 1,
-    y: 0,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: '3',
-    name: 'weather',
-    x: 2,
-    y: 0,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: '4',
-    name: 'ascii',
-    x: 3,
-    y: 0,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: '5',
-    name: 'todo',
-    x: 4,
-    y: 0,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: '6',
-    name: 'memo',
-    x: 0,
-    y: 1,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: '7',
-    name: 'timer',
-    x: 1,
-    y: 1,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-]
 const tmpStyle: React.CSSProperties = {
   background: '#ffffaa',
   width: '250px',
@@ -84,7 +20,7 @@ export const Navigation = tmp
 export const grid: Story<{ widgets: layoutType }> = ({ widgets }) => (
   <Grid gridItems={widgets} />
 )
-grid.args = { widgets: dummy }
+grid.args = { widgets: layoutDummy }
 
 export const store: Story<{
   storeVisible: boolean
