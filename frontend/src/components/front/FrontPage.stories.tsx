@@ -33,7 +33,7 @@ const UseNow = () => (
 
 export const FrontPage = () => (
   <ScrollArea type='never'>
-    <Stack align='center'>
+    <Stack align='center' spacing={100}>
       <Description1 />
       <Description2 />
       <UseNow />
