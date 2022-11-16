@@ -1,5 +1,5 @@
 import { Button, Paper, Stack, Text } from '@mantine/core'
-import { Logo } from '../common'
+import { Logo } from 'components/common'
 import { CredentialInput } from './CredentialInput'
 
 export const Credential = CredentialInput
