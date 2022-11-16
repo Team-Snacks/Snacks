@@ -11,17 +11,19 @@ export const Widget = ({
   widget: widgetType
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: widget.name })
+    useSortable({ id: widget.uuid })
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    // transition, //전환 동작과 관련된 부분 https://docs.dndkit.com/presets/sortable/usesortable#transition-1
+    gridColumn: `${widget.x + 1 + '/' + (widget.w + widget.x + 1)}`,
+    gridRow: `${widget.y + 1 + '/' + (widget.h + widget.y + 1)}`,
   }
   const selectWidget = () => {
     switch (widget.name) {
       case 'weather':
         return <Weather widgetData={widget}></Weather>
       default:
-        return <div>dummy</div> //추후 위젯 추가
+        return <div>{widget.name}</div> //추후 위젯 추가
     }
   }
   return (
