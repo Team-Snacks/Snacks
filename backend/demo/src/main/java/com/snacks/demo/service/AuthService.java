@@ -7,6 +7,7 @@ import com.snacks.demo.response.CommonResponse;
 import com.snacks.demo.response.ResponseService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,9 @@ public class AuthService {
     Optional<User> existedUser = authRepository.findByEmail(user.getEmail());
 
     if(existedUser.isPresent()){
-      return ResponseEntity.status(409).body(responseService.errorResponse(409,"이미 존재하는 이메일입니다."));
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(responseService.errorResponse(409,"이미 존재하는 이메일입니다."));
     }
     authRepository.save(user);
-    return ResponseEntity.status(201).body(responseService.getCommonResponse(201));
+    return ResponseEntity.status(HttpStatus.CREATED).body(responseService.getCommonResponse(201));
   }
 }
