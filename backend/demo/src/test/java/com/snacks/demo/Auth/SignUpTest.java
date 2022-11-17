@@ -3,6 +3,7 @@ package com.snacks.demo.Auth;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.snacks.demo.ConstantTest;
 import com.snacks.demo.dto.UserDto;
 import com.snacks.demo.service.AuthService;
 import java.util.Set;
@@ -57,16 +58,15 @@ public class SignUpTest {
     factory.close();
   }
 
-
   // 테스트 케이스
   static Stream<Arguments> signUpProvider() throws Throwable {
     return Stream.of(
-        Arguments.arguments("test@test.com", "1234", "정상 테스트", true),
+        Arguments.arguments(ConstantTest.VALID_EMAIL, ConstantTest.VALID_PASSWORD, "정상 테스트", true),
         Arguments.arguments("", "1234", "empty 이메일", false),
         Arguments.arguments(null, "1234", "null 이메일", false),
         Arguments.arguments("test@test.com", "", "empty 비밀번호", false),
         Arguments.arguments("test@test.com", null, "null 비밀번호", false),
-        Arguments.arguments("","", "empty 이메일, empty 비밀번호", false),
+        Arguments.arguments("", "", "empty 이메일, empty 비밀번호", false),
         Arguments.arguments(null, null, "null 이메일, null 비밀번호", false),
         Arguments.arguments("test", "1234", "잘못된 이메일 형식", false),
         Arguments.arguments("test", "", "잘못된 이메일 형식, null 비밀번호", false),
@@ -76,9 +76,8 @@ public class SignUpTest {
 
   static Stream<Arguments> signUpServiceProvider() throws Throwable {
     return Stream.of(
-        Arguments.arguments("test@test.com", "1234", "회원가입 성공", true),
-        Arguments.arguments("test@test.com", "1234", "이메일 중복, 회원가입 실패", false)
-
+        Arguments.arguments(ConstantTest.VALID_EMAIL, ConstantTest.VALID_PASSWORD, "회원가입 성공", true),
+        Arguments.arguments(ConstantTest.VALID_EMAIL, ConstantTest.VALID_PASSWORD, "이메일 중복, 회원가입 실패", false)
     );
   }
 
@@ -106,7 +105,7 @@ public class SignUpTest {
 
 
   // service 테스트
-  @ParameterizedTest(name = "{index} : {2}")
+  @ParameterizedTest(name = "{index} - {3} - {2}")
   @DisplayName("signUp Service 테스트")
   @MethodSource("signUpServiceProvider")
   void signUpService(String email, String password, String message, boolean expected) {
@@ -118,8 +117,7 @@ public class SignUpTest {
     //then
     if (expected == true) {
       assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
-    else {
+    } else {
       assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
     }
   }
@@ -130,7 +128,7 @@ public class SignUpTest {
   @Test
   void signupController() throws Exception {
     //given
-    String user = objectMapper.writeValueAsString(new UserDto("test@test", "1234"));
+    String user = objectMapper.writeValueAsString(new UserDto("signup@email.com", "1234"));
 
     //when
 

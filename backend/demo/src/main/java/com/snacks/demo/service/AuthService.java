@@ -3,7 +3,7 @@ package com.snacks.demo.service;
 import com.snacks.demo.dto.UserDto;
 import com.snacks.demo.entity.User;
 import com.snacks.demo.repository.AuthRepository;
-import com.snacks.demo.response.ResponseMessage;
+import com.snacks.demo.response.ConstantResponse;
 import com.snacks.demo.response.ResponseService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class AuthService {
 
     if (existedUser.isPresent()) {
       return ResponseEntity.status(HttpStatus.CONFLICT)
-          .body(responseService.errorResponse(ResponseMessage.EMAIL_EXSIST));
+          .body(responseService.errorResponse(ConstantResponse.EMAIL_EXSIST));
     }
     authRepository.save(user);
     return ResponseEntity.status(HttpStatus.CREATED).
@@ -49,11 +49,11 @@ public class AuthService {
     Optional<User> existedUser = authRepository.findByEmail(userDto.getEmail());
     if (!existedUser.isPresent()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body(responseService.errorResponse(ResponseMessage.EMAIL_NOT_FOUND));
+          .body(responseService.errorResponse(ConstantResponse.EMAIL_NOT_FOUND));
     }
     if (!passwordEncoder.matches(userDto.getPassword(), existedUser.get().getPassword())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-          .body(responseService.errorResponse(ResponseMessage.PASSWORD_NOT_MATCH));
+          .body(responseService.errorResponse(ConstantResponse.PASSWORD_NOT_MATCH));
     }
     return ResponseEntity.status(HttpStatus.OK).
         body(responseService.getCommonResponse());

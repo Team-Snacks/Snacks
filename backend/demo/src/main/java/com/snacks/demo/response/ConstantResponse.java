@@ -1,6 +1,6 @@
 package com.snacks.demo.response;
 
-public record ResponseMessage() {
+public record ConstantResponse() {
 
   public static final String EMAIL_EXSIST = "이미 존재하는 이메일입니다.";
   public static final String EMAIL_NULL = "이메일은 필수 입력 값입니다.";
