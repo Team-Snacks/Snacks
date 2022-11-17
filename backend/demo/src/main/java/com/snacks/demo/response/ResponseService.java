@@ -42,8 +42,8 @@ public class ResponseService {
         return (errorResponse);
     }
     //CommonResponse의 값을 성공으로 변환
-    void setSuccessResponse(CommonResponse response, int stauts) {
-        response.status = stauts;
+    void setSuccessResponse(CommonResponse response, int status) {
+        response.status = status;
         response.log = "OK";
     }
 }
