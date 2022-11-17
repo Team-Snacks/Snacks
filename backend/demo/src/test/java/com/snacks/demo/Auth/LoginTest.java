@@ -3,7 +3,6 @@ package com.snacks.demo.Auth;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.snacks.demo.dto.UserDto;
-import com.snacks.demo.response.CommonResponse;
 import com.snacks.demo.service.AuthService;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;

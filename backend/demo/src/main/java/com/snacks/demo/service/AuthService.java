@@ -3,7 +3,6 @@ package com.snacks.demo.service;
 import com.snacks.demo.dto.UserDto;
 import com.snacks.demo.entity.User;
 import com.snacks.demo.repository.AuthRepository;
-import com.snacks.demo.response.CommonResponse;
 import com.snacks.demo.response.ResponseMessage;
 import com.snacks.demo.response.ResponseService;
 import java.util.Optional;
