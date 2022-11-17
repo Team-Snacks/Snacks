@@ -17,6 +17,7 @@ export const Widget = ({
     // transition, //전환 동작과 관련된 부분 https://docs.dndkit.com/presets/sortable/usesortable#transition-1
     gridColumn: `${widget.x + 1 + '/' + (widget.w + widget.x + 1)}`,
     gridRow: `${widget.y + 1 + '/' + (widget.h + widget.y + 1)}`,
+    border: 'solid 1px black',
   }
   const selectWidget = () => {
     switch (widget.name) {

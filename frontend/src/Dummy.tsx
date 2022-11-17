@@ -41,7 +41,7 @@ export const layoutDummy: layoutType = [
     uuid: '5',
     name: 'todo',
     x: 4,
-    y: 0,
+    y: 3,
     w: 1,
     h: 1,
     data: JSON.parse('{"aa" : "bb"}'),
