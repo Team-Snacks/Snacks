@@ -36,9 +36,9 @@ public class AuthService {
     Optional<User> existedUser = authRepository.findByEmail(user.getEmail());
 
     if(existedUser.isPresent()){
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(responseService.errorResponse(409,"이미 존재하는 이메일입니다."));
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(responseService.errorResponse("이미 존재하는 이메일입니다."));
     }
     authRepository.save(user);
-    return ResponseEntity.status(HttpStatus.CREATED).body(responseService.getCommonResponse(201));
+    return ResponseEntity.status(HttpStatus.CREATED).body(responseService.getCommonResponse());
   }
 }
