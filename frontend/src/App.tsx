@@ -1,5 +1,6 @@
-import { Users } from 'components/users'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './router'
 
 export const App = () => {
-  return <Users />
+  return <RouterProvider router={router} />
 }

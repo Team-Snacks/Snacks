@@ -1,6 +1,7 @@
 import { Button, Image, ScrollArea, Stack, Text, Title } from '@mantine/core'
 import snacksHands from 'assets/snacks-hands.png'
 import example from 'assets/example.png'
+import { Link } from 'react-router-dom'
 
 const Description1 = () => (
   <>
@@ -27,7 +28,9 @@ const Description2 = () => (
 const UseNow = () => (
   <>
     <Title order={3}>Snacks 이용하기</Title>
-    <Button>가입하기</Button>
+    <Link to="/auth">
+      <Button>가입하기</Button>
+    </Link>
   </>
 )
 
