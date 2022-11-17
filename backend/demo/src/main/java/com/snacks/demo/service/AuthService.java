@@ -28,7 +28,7 @@ public class AuthService {
   }
 
 
-  public ResponseEntity signUp(UserDto userDto){
+  public ResponseEntity signUp(UserDto userDto) {
     //signup
     User user = new User();
     user.setEmail(userDto.getEmail());
@@ -36,10 +36,27 @@ public class AuthService {
 
     Optional<User> existedUser = authRepository.findByEmail(user.getEmail());
 
-    if(existedUser.isPresent()){
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(responseService.errorResponse(ResponseMessage.EMAIL_EXSIST));
+    if (existedUser.isPresent()) {
+      return ResponseEntity.status(HttpStatus.CONFLICT)
+          .body(responseService.errorResponse(ResponseMessage.EMAIL_EXSIST));
     }
     authRepository.save(user);
-    return ResponseEntity.status(HttpStatus.CREATED).body(responseService.getCommonResponse());
+    return ResponseEntity.status(HttpStatus.CREATED).
+        body(responseService.getCommonResponse());
+  }
+
+  public ResponseEntity login(UserDto userDto) {
+    //login
+    Optional<User> existedUser = authRepository.findByEmail(userDto.getEmail());
+    if (!existedUser.isPresent()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(responseService.errorResponse(ResponseMessage.EMAIL_NOT_FOUND));
+    }
+    if (!passwordEncoder.matches(userDto.getPassword(), existedUser.get().getPassword())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+          .body(responseService.errorResponse(ResponseMessage.PASSWORD_NOT_MATCH));
+    }
+    return ResponseEntity.status(HttpStatus.OK).
+        body(responseService.getCommonResponse());
   }
 }
