@@ -6,7 +6,7 @@ export interface Credential {
   password: string
 }
 
-export interface widgetType {
+export interface WidgetType {
   uuid: string
   name: string
   x: number
@@ -15,4 +15,4 @@ export interface widgetType {
   h: number
   data: JSON
 }
-export type layoutType = widgetType[]
+export type Widgets = WidgetType[]

@@ -1,19 +1,19 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { layoutType, widgetType } from 'common'
+import { Widgets, WidgetType } from 'common'
 import { Weather } from './Weather'
 
 export const Widget = ({
   layout,
   widget,
 }: {
-  layout: layoutType
-  widget: widgetType
+  layout: Widgets
+  widget: WidgetType
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: widget.uuid })
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString(transform), //이동 모션과 관련된 부분
     // transition, //전환 동작과 관련된 부분 https://docs.dndkit.com/presets/sortable/usesortable#transition-1
     gridColumn: `${widget.x + 1 + '/' + (widget.w + widget.x + 1)}`,
     gridRow: `${widget.y + 1 + '/' + (widget.h + widget.y + 1)}`,
