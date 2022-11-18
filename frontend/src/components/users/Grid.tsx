@@ -9,7 +9,7 @@ type Coordinate = {
   y: number
 }
 
-export const Grid = ({ gridItems }: { gridItems: Widgets }) => {
+export const Grid = ({ widgets }: { widgets: Widgets }) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
   const gridRef: LegacyRef<HTMLDivElement> = createRef()
   const tmpStyle: React.CSSProperties = {
@@ -20,24 +20,14 @@ export const Grid = ({ gridItems }: { gridItems: Widgets }) => {
     gridTemplateColumns: 'repeat(5, 1fr)',
     gridGap: 10,
   }
-  //#######이동 알고리즘 들어가는 부분 제일 중요#########
-  //교환할 수 있는 경우 moveItem, 빈 곳으로 이동하는 경우 moveItemToEmpty로 이동
+  //state cursorPosition을 기반으로 위젯을 이동한다
   const handleDragEnd = (event: DragEndEvent) => {
-    if (event.over && event.active.id !== event.over?.id) {
-      const oldIndex = gridItems.findIndex(
-        item => item.uuid === event.active.id
-      )
-      const newIndex = gridItems.findIndex(item => item.uuid === event.over?.id)
-      moveItem(gridItems, oldIndex, newIndex)
-    } else if (event.active && event.over === null) {
-      //useState로 좌표를 가지고 있기 handleDragMove를 만들고 그 함수에서 계속 State를 갱신하게 하자
-      //그리고 moveItemToEmpty 같은 거 만들고 그 state를 적용시키도록 한다
-      if (cursorPosition.x !== 0 || cursorPosition.y !== 0) {
-        const index = gridItems.findIndex(item => item.uuid === event.active.id)
-        moveItemToEmpty(gridItems, index)
-      }
+    if (cursorPosition.x !== 0 || cursorPosition.y !== 0) {
+      const index = widgets.findIndex(item => item.uuid === event.active.id)
+      moveItem(index)
     }
   }
+  //드래그 중의 포인터 움직임을 State에 저장한다
   const handleDragMove = (event: DragMoveEvent) => {
     if (gridRef.current) {
       setCursorPosition({
@@ -49,6 +39,7 @@ export const Grid = ({ gridItems }: { gridItems: Widgets }) => {
     //이걸 그리드 사이즈에 대한 비율로 나눠서 어느 정도 이동했는지 좌표를 구한다
     //x, y좌표를 state로 저장한다
   }
+  //위젯 둘을 서로 교환한다.
   const swapItem = (layout: Widgets, oldIndex: number, newIndex: number) => {
     const tmpX = layout[oldIndex].x
     const tmpY = layout[oldIndex].y
@@ -57,20 +48,45 @@ export const Grid = ({ gridItems }: { gridItems: Widgets }) => {
     layout[newIndex].x = tmpX
     layout[newIndex].y = tmpY
   }
-  //해당 위젯이 차지하고 있는 좌표 리스트를 반환
-  const makeCoordinates = (layout: Widgets, start: number, end: number) => {
-    const swapPlace: Coordinate[] = []
-    for (let i = 0; i < layout[start].h; i++) {
-      for (let j = 0; j < layout[start].w; j++) {
-        swapPlace.push({
-          x: layout[end].x + j,
-          y: layout[end].y + i,
+  //해당 위젯이 차지하고 있는 좌표 배열을 반환
+  const makeWidgetCoordinates = (index: number) => {
+    const coordList: Coordinate[] = []
+    for (let i = 0; i < widgets[index].h; i++) {
+      for (let j = 0; j < widgets[index].w; j++) {
+        coordList.push({
+          x: widgets[index].x + j,
+          y: widgets[index].y + i,
         })
       }
     }
-    return swapPlace
+    return coordList
+  }
+  //위젯을 옮길 경우 차지하게 될 좌표 배열을 반환
+  const makeMoveCoordinates = (index: number, coord: Coordinate) => {
+    //const movedWidget = widgets[index]의 깊은 복사
+  }
+  //해당 좌표 범위 내에 존재하고 있는 위젯들의 배열을 반환
+  const coordinateRangeWidgets = (start: Coordinate, end: Coordinate) => {
+    const widgetList: Widgets = []
+    const permutation: Coordinate[] = []
+    for (let i = start.x; i < end.x; i++) {
+      for (let j = start.y; j < end.y; j++) {
+        permutation.push({ x: i, y: j })
+      }
+    }
+    widgets.map((ele, index) => {
+      const indexCoords = makeWidgetCoordinates(index)
+      permutation.map(perEle => {
+        indexCoords.map(indexEle => {
+          if (indexEle.x === perEle.x && indexEle.y === perEle.y)
+            widgetList.push(ele)
+        })
+      })
+    })
+    return widgetList
   }
 
+  //위젯을 미는 동작을 수행한다
   const pushItem = (layout: Widgets, oldIndex: number, newIndex: number) => {
     const swapCoordinates = makeCoordinates(layout, oldIndex, newIndex)
     layout.map((ele, index) => {
@@ -153,34 +169,75 @@ export const Grid = ({ gridItems }: { gridItems: Widgets }) => {
     } else return false
   }
 
-  const moveItem = (layout: Widgets, oldIndex: number, newIndex: number) => {
-    //push를 먼저 시도하고 실패하면 swap을 시도할 예정 아직 덜만듦
+  // const moveItem = (layout: Widgets, oldIndex: number, newIndex: number) => {
+  //   //push를 먼저 시도하고 실패하면 swap을 시도할 예정 아직 덜만듦
 
-    //1. 해당 위젯 스왑될 위치를 다음과 같은 배열로 만듬 [{x, y}, ...] 차지하고 있는 좌표들의 배열
-    //2. 위젯리스트를 돌면서 그 위젯에 대한 배열을 만들고, 1의 배열과 비교해서 겹치는 좌표가 있는 지 확인
-    //3. 겹치는 좌표가 없다면 바로 스왑
-    //4. 겹치는 좌표가 있다면, 그 위젯을 상하좌우로 밀어내기(밀어낼 위치를 검사해 가능 불가능 확인 후 밀기)
-    //5. 우선순위는 밀어내기 -> 스왑 -> 불가능
-    //드래그 시 CSS 등 세세한 동작은 추후 만들기..
+  //   //1. 해당 위젯 스왑될 위치를 다음과 같은 배열로 만듬 [{x, y}, ...] 차지하고 있는 좌표들의 배열
+  //   //2. 위젯리스트를 돌면서 그 위젯에 대한 배열을 만들고, 1의 배열과 비교해서 겹치는 좌표가 있는 지 확인
+  //   //3. 겹치는 좌표가 없다면 바로 스왑
+  //   //4. 겹치는 좌표가 있다면, 그 위젯을 상하좌우로 밀어내기(밀어낼 위치를 검사해 가능 불가능 확인 후 밀기)
+  //   //5. 우선순위는 밀어내기 -> 스왑 -> 불가능
+  //   //드래그 시 CSS 등 세세한 동작은 추후 만들기..
 
-    pushItem(layout, oldIndex, newIndex)
-    // swapItem(layout, oldIndex, newIndex)
+  //   pushItem(layout, oldIndex, newIndex)
+  //   // swapItem(layout, oldIndex, newIndex)
+  // }
+  const moveItemEmpty = (widget: WidgetType) => {
+    const movedWidget: WidgetType = JSON.parse(JSON.stringify(widget))
+    movedWidget.x += cursorPosition.x
+    movedWidget.y += cursorPosition.y
+    const movedRangeWidgets = coordinateRangeWidgets(
+      { x: movedWidget.x, y: movedWidget.y },
+      { x: movedWidget.x + movedWidget.w, y: movedWidget.y + movedWidget.h }
+    ).filter(ele => ele.uuid !== widget.uuid)
+
+    if (
+      movedRangeWidgets.length === 0 &&
+      movedWidget.x >= 0 &&
+      movedWidget.y >= 0 &&
+      movedWidget.x < 5 &&
+      movedWidget.y < 3
+    ) {
+      widget.x += cursorPosition.x
+      widget.y += cursorPosition.y
+      return true
+    }
+    return false //빈공간으로 이동 할 수 없음
   }
+  const moveItem = (index: number) => {
+    //빈 공간인가? 위젯 크기만큼의 좌표들이 다 비어있어야 함.
+    if (moveItemEmpty(widgets[index]) === true) return
+    //push 가능?
 
-  const moveItemToEmpty = (layout: Widgets, index: number) => {
-    layout[index].x += cursorPosition.x
-    layout[index].y += cursorPosition.y
+    //swap 가능
+
+    //불가능
+  }
+  //위젯들을 기반으로 위젯이 채워진 좌표계를 만듦
+  const makeGridCoordinates = () => {
+    const newGridCoordinates: Array<{ uuid: string }[]> = new Array(5)
+    for (let i = 0; i < 5; i++) {
+      newGridCoordinates[i] = new Array(3)
+      newGridCoordinates[i].fill({ uuid: 'empty' })
+    }
+    widgets.map((ele, index) => {
+      const eleCoordinate = makeWidgetCoordinates(index)
+      eleCoordinate.map(eleEle => {
+        newGridCoordinates[eleEle.x][eleEle.y] = { uuid: ele.uuid }
+      })
+    })
+    return newGridCoordinates
   }
 
   return (
     <div style={tmpStyle} ref={gridRef}>
       <DndContext onDragEnd={handleDragEnd} onDragMove={handleDragMove}>
         <SortableContext
-          items={gridItems.map(ele => ele.uuid)}
+          items={widgets.map(ele => ele.uuid)}
           strategy={rectSwappingStrategy}
         >
-          {gridItems.map((ele, index) => (
-            <Widget layout={gridItems} widget={ele} key={index}></Widget>
+          {widgets.map((ele, index) => (
+            <Widget layout={widgets} widget={ele} key={index}></Widget>
           ))}
         </SortableContext>
       </DndContext>
