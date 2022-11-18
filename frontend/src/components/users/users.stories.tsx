@@ -1,5 +1,5 @@
 import { Button, Navbar } from '@mantine/core'
-import { layoutType } from 'common'
+import { Widgets } from 'common'
 import { Grid } from './Grid'
 import { Navigation as tmp } from './Navigation'
 import type { Story } from '@ladle/react'
@@ -17,7 +17,7 @@ const tmpStyle: React.CSSProperties = {
 
 export const Navigation = tmp
 
-export const grid: Story<{ widgets: layoutType }> = ({ widgets }) => (
+export const grid: Story<{ widgets: Widgets }> = ({ widgets }) => (
   <Grid gridItems={widgets} />
 )
 grid.args = { widgets: layoutDummy }
