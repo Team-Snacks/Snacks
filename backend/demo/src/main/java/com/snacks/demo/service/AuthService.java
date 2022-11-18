@@ -3,10 +3,12 @@ package com.snacks.demo.service;
 import com.snacks.demo.dto.UserDto;
 import com.snacks.demo.entity.User;
 import com.snacks.demo.repository.AuthRepository;
-import com.snacks.demo.response.CommonResponse;
+import com.snacks.demo.response.ConstantResponse;
 import com.snacks.demo.response.ResponseService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class AuthService {
   }
 
 
-  public CommonResponse signUp(UserDto userDto){
+  public ResponseEntity signUp(UserDto userDto) {
     //signup
     User user = new User();
     user.setEmail(userDto.getEmail());
@@ -33,10 +35,27 @@ public class AuthService {
 
     Optional<User> existedUser = authRepository.findByEmail(user.getEmail());
 
-    if(existedUser.isPresent()){
-      return responseService.errorResponse(409, "이미 존재하는 이메일입니다.");
+    if (existedUser.isPresent()) {
+      return ResponseEntity.status(HttpStatus.CONFLICT)
+          .body(responseService.errorResponse(ConstantResponse.EMAIL_EXSIST));
     }
     authRepository.save(user);
-    return responseService.getCommonResponse();
+    return ResponseEntity.status(HttpStatus.CREATED).
+        body(responseService.getCommonResponse());
+  }
+
+  public ResponseEntity login(UserDto userDto) {
+    //login
+    Optional<User> existedUser = authRepository.findByEmail(userDto.getEmail());
+    if (!existedUser.isPresent()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(responseService.errorResponse(ConstantResponse.EMAIL_NOT_FOUND));
+    }
+    if (!passwordEncoder.matches(userDto.getPassword(), existedUser.get().getPassword())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+          .body(responseService.errorResponse(ConstantResponse.PASSWORD_NOT_MATCH));
+    }
+    return ResponseEntity.status(HttpStatus.OK).
+        body(responseService.getCommonResponse());
   }
 }

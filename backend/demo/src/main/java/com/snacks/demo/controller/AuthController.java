@@ -1,10 +1,10 @@
 package com.snacks.demo.controller;
 
 import com.snacks.demo.dto.UserDto;
-import com.snacks.demo.response.CommonResponse;
 import com.snacks.demo.response.ResponseService;
 import com.snacks.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -26,12 +26,23 @@ public class AuthController {
   @Autowired
   PasswordEncoder passwordEncoder;
 
-  @PostMapping(" ")
-  public CommonResponse signUp(@Validated @RequestBody UserDto userDto, BindingResult bindingResult) {
+  @PostMapping("")
+  public ResponseEntity signUp(@Validated @RequestBody UserDto userDto,
+      BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
-      return responseService.errorResponse(400, bindingResult.getFieldError().getDefaultMessage());
+      return ResponseEntity.badRequest()
+          .body(responseService.errorResponse(bindingResult.getFieldError().getDefaultMessage()));
     }
     return authService.signUp(userDto);
   }
 
+  @PostMapping("/login")
+  public ResponseEntity login(@Validated @RequestBody UserDto userDto,
+      BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return ResponseEntity.badRequest()
+          .body(responseService.errorResponse(bindingResult.getFieldError().getDefaultMessage()));
+    }
+    return authService.login(userDto);
+  }
 }
