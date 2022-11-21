@@ -16,3 +16,8 @@ export interface WidgetType {
   data: JSON
 }
 export type Widgets = WidgetType[]
+
+export type Coordinate = {
+  x: number
+  y: number
+}

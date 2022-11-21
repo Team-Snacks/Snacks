@@ -1,13 +1,9 @@
 import { DndContext, DragEndEvent, DragMoveEvent } from '@dnd-kit/core'
 import { rectSwappingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { Widget } from 'components/widgets/Widget'
-import { Widgets, WidgetType } from 'common'
+import { Coordinate, Widgets, WidgetType } from 'common'
 import { createRef, LegacyRef, useState } from 'react'
-
-type Coordinate = {
-  x: number
-  y: number
-}
+import { coordinateRangeWidgets } from './GridTools'
 
 export const Grid = ({ widgets }: { widgets: Widgets }) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -39,57 +35,6 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
     //이걸 그리드 사이즈에 대한 비율로 나눠서 어느 정도 이동했는지 좌표를 구한다
     //x, y좌표를 state로 저장한다
   }
-
-  //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
-  const makeWidgetCoordinates = (index: number) => {
-    const coordList: Coordinate[] = []
-    for (let i = 0; i < widgets[index].h; i++) {
-      for (let j = 0; j < widgets[index].w; j++) {
-        coordList.push({
-          x: widgets[index].x + j,
-          y: widgets[index].y + i,
-        })
-      }
-    }
-    return coordList
-  }
-  //해당 좌표 범위 내에 존재하고 있는 위젯들의 배열을 반환 [완료][tools]
-  const coordinateRangeWidgets = (start: Coordinate, end: Coordinate) => {
-    const widgetList: Widgets = []
-    const permutation: Coordinate[] = []
-    for (let i = start.x; i < end.x; i++) {
-      for (let j = start.y; j < end.y; j++) {
-        permutation.push({ x: i, y: j })
-      }
-    }
-    widgets.map((ele, index) => {
-      const indexCoords = makeWidgetCoordinates(index)
-      permutation.map(perEle => {
-        indexCoords.map(indexEle => {
-          if (indexEle.x === perEle.x && indexEle.y === perEle.y)
-            widgetList.push(ele)
-        })
-      })
-    })
-    return widgetList
-  }
-  //위젯들을 기반으로 위젯이 채워진 좌표계를 만듦 [완료][tools]
-  const makeGridCoordinates = () => {
-    const newGridCoordinates: Array<{ uuid: string }[]> = new Array(5)
-    for (let i = 0; i < 5; i++) {
-      newGridCoordinates[i] = new Array(3)
-      newGridCoordinates[i].fill({ uuid: 'empty' })
-    }
-    widgets.map((ele, index) => {
-      const eleCoordinate = makeWidgetCoordinates(index)
-      eleCoordinate.map(eleEle => {
-        newGridCoordinates[eleEle.x][eleEle.y] = { uuid: ele.uuid }
-      })
-    })
-    return newGridCoordinates
-  }
-  //위젯을 옮길 경우 차지하게 될 좌표 배열을 반환 [tools]
-  const makeMoveCoordinates = (index: number, coord: Coordinate) => {}
 
   //위젯을 미는 동작을 수행한다 [새로 만들 예정][주기능]
   // const pushItem = (layout: Widgets, oldIndex: number, newIndex: number) => {
@@ -175,6 +120,7 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
     //1. cursorPosition를 통해 교환할 위젯을 찾는다. 이동하려는 좌표에 위치하고, w h 크기가 같아야 함.
     //2. 조건이 맞으면 교환 후 true, 실패하면 false
     const swapRange = coordinateRangeWidgets(
+      widgets,
       {
         x: widget.x + cursorPosition.x,
         y: widget.y + cursorPosition.y,
@@ -208,6 +154,7 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
     movedWidget.x += cursorPosition.x
     movedWidget.y += cursorPosition.y
     const movedRangeWidgets = coordinateRangeWidgets(
+      widgets,
       { x: movedWidget.x, y: movedWidget.y },
       { x: movedWidget.x + movedWidget.w, y: movedWidget.y + movedWidget.h }
     ).filter(ele => ele.uuid !== widget.uuid)
