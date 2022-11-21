@@ -1,18 +1,19 @@
-import { Coordinate, Widgets, WidgetType } from 'common'
+import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
-export const makeWidgetCoordinates = (widgets: Widgets, index: number) => {
+export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) => {
   const coordList: Coordinate[] = []
-  for (let i = 0; i < widgets[index].h; i++) {
-    for (let j = 0; j < widgets[index].w; j++) {
+  for (let i = 0; i < h; i++) {
+    for (let j = 0; j < w; j++) {
       coordList.push({
-        x: widgets[index].x + j,
-        y: widgets[index].y + i,
+        x: x + j,
+        y: y + i,
       })
     }
   }
   return coordList
 }
+
 //해당 좌표 범위 내에 존재하고 있는 위젯들의 배열을 반환 [완료][tools]
 export const coordinateRangeWidgets = (
   widgets: Widgets,
@@ -26,8 +27,8 @@ export const coordinateRangeWidgets = (
       permutation.push({ x: i, y: j })
     }
   }
-  widgets.map((ele, index) => {
-    const indexCoords = makeWidgetCoordinates(widgets, index)
+  widgets.map(ele => {
+    const indexCoords = makeWidgetCoordinates(ele)
     permutation.map(perEle => {
       indexCoords.map(indexEle => {
         if (indexEle.x === perEle.x && indexEle.y === perEle.y)
@@ -44,8 +45,8 @@ export const makeGridCoordinates = (widgets: Widgets) => {
     newGridCoordinates[i] = new Array(3)
     newGridCoordinates[i].fill({ uuid: 'empty' })
   }
-  widgets.map((ele, index) => {
-    const eleCoordinate = makeWidgetCoordinates(widgets, index)
+  widgets.map(ele => {
+    const eleCoordinate = makeWidgetCoordinates(ele)
     eleCoordinate.map(eleEle => {
       newGridCoordinates[eleEle.x][eleEle.y] = { uuid: ele.uuid }
     })
