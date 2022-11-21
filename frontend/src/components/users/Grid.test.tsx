@@ -1,10 +1,15 @@
 import { test, expect } from 'vitest'
+import { moveItemEmpty, moveItemSwap } from './GridTools'
 import {
   coordinateRangeWidgets,
   makeGridCoordinates,
   makeWidgetCoordinates,
 } from './GridTools'
 
+// 이런 모양입니다
+// [1][2][2][ ][ ]
+// [3][5][ ][4][4]
+// [3][ ][ ][4][4]
 const gridRandomSizes = [
   {
     uuid: 'weather01',
@@ -74,56 +79,14 @@ test('makeWidgetCoordinates 테스트', () => {
 test('coordinateRangeWidgets 테스트', () => {
   expect(
     coordinateRangeWidgets(gridRandomSizes, { x: 0, y: 0 }, { x: 1, y: 1 })
-  ).toEqual([
-    {
-      uuid: 'weather01',
-      name: 'weather',
-      x: 0,
-      y: 0,
-      w: 1,
-      h: 1,
-      data: JSON.parse('{"aa" : "bb"}'),
-    },
-  ])
+  ).toEqual([gridRandomSizes[0]])
   expect(
     coordinateRangeWidgets(gridRandomSizes, { x: 0, y: 0 }, { x: 2, y: 2 })
   ).toEqual([
-    {
-      uuid: 'weather01',
-      name: 'weather',
-      x: 0,
-      y: 0,
-      w: 1,
-      h: 1,
-      data: JSON.parse('{"aa" : "bb"}'),
-    },
-    {
-      uuid: 'memo02',
-      name: 'memo',
-      x: 1,
-      y: 0,
-      w: 2,
-      h: 1,
-      data: JSON.parse('{"aa" : "bb"}'),
-    },
-    {
-      uuid: 'weather03',
-      name: 'weather',
-      x: 0,
-      y: 1,
-      w: 1,
-      h: 2,
-      data: JSON.parse('{"aa" : "bb"}'),
-    },
-    {
-      uuid: 'todo05',
-      name: 'todo',
-      x: 1,
-      y: 1,
-      w: 1,
-      h: 1,
-      data: JSON.parse('{"aa" : "bb"}'),
-    },
+    gridRandomSizes[0],
+    gridRandomSizes[1],
+    gridRandomSizes[2],
+    gridRandomSizes[4],
   ])
   expect(
     coordinateRangeWidgets(gridRandomSizes, { x: 2, y: 2 }, { x: 3, y: 3 })
@@ -138,4 +101,46 @@ test('makeGridCoordinates 테스트', () => {
     [{ uuid: 'empty' }, { uuid: 'ascii04' }, { uuid: 'ascii04' }],
     [{ uuid: 'empty' }, { uuid: 'ascii04' }, { uuid: 'ascii04' }],
   ])
+})
+
+test('moveItemSwap 테스트', () => {
+  expect(
+    moveItemSwap(gridRandomSizes[0], { x: 1, y: 1 }, gridRandomSizes)
+  ).toEqual(gridRandomSizes[4])
+  expect(
+    moveItemSwap(gridRandomSizes[0], { x: 1, y: 0 }, gridRandomSizes)
+  ).toEqual(false)
+  expect(
+    moveItemSwap(gridRandomSizes[0], { x: 0, y: 1 }, gridRandomSizes)
+  ).toEqual(false)
+  expect(
+    moveItemSwap(gridRandomSizes[0], { x: 2, y: 2 }, gridRandomSizes)
+  ).toEqual(false)
+})
+
+test('moveItemEmpty 테스트', () => {
+  expect(
+    moveItemEmpty(gridRandomSizes[0], { x: 1, y: 1 }, gridRandomSizes)
+  ).toEqual(false)
+  expect(
+    moveItemEmpty(gridRandomSizes[0], { x: 1, y: 0 }, gridRandomSizes)
+  ).toEqual(false)
+  expect(
+    moveItemEmpty(gridRandomSizes[0], { x: 0, y: 1 }, gridRandomSizes)
+  ).toEqual(false)
+  expect(
+    moveItemEmpty(gridRandomSizes[0], { x: 2, y: 2 }, gridRandomSizes)
+  ).toEqual(true)
+  expect(
+    moveItemEmpty(gridRandomSizes[1], { x: 1, y: 0 }, gridRandomSizes)
+  ).toEqual(true)
+  expect(
+    moveItemEmpty(gridRandomSizes[2], { x: 2, y: 0 }, gridRandomSizes)
+  ).toEqual(true)
+  expect(
+    moveItemEmpty(gridRandomSizes[3], { x: 0, y: -1 }, gridRandomSizes)
+  ).toEqual(true)
+  expect(
+    moveItemEmpty(gridRandomSizes[4], { x: 1, y: 0 }, gridRandomSizes)
+  ).toEqual(true)
 })

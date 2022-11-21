@@ -1,4 +1,4 @@
-import { Coordinate, Widgets } from 'common'
+import { Coordinate, Widgets, WidgetType } from 'common'
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
 export const makeWidgetCoordinates = (widgets: Widgets, index: number) => {
@@ -58,3 +58,61 @@ export const makeMoveCoordinates = (
   index: number,
   coord: Coordinate
 ) => {}
+
+//위젯을 교환할 수 있는지 여부를 확인해 교환할 위젯 또는 false를 반환. [완료][주기능]
+export const moveItemSwap = (
+  widget: WidgetType,
+  cursorPosition: Coordinate,
+  widgets: Widgets
+) => {
+  //1. cursorPosition를 통해 교환할 위젯을 찾는다. 이동하려는 좌표에 위치하고, w h 크기가 같아야 함.
+  //2. 조건이 맞으면 교환할 위젯을 반환, 실패하면 false
+  const swapRange = coordinateRangeWidgets(
+    widgets,
+    {
+      x: widget.x + cursorPosition.x,
+      y: widget.y + cursorPosition.y,
+    },
+    {
+      x: widget.x + widget.w + cursorPosition.x,
+      y: widget.y + widget.h + cursorPosition.y,
+    }
+  ).filter(ele => ele.uuid !== widget.uuid)
+  if (
+    swapRange.length === 1 &&
+    swapRange[0].w === widget.w &&
+    swapRange[0].h === widget.h
+  ) {
+    const swapWidget = widgets.find(ele => {
+      return ele.uuid === swapRange[0].uuid
+    })
+    if (!swapWidget) return false
+    else return swapWidget
+  }
+  return false
+}
+//빈 곳으로 위젯을 이동할 지 여부를 반환한다 [완료] [주기능]
+export const moveItemEmpty = (
+  widget: WidgetType,
+  cursorPosition: Coordinate,
+  widgets: Widgets
+) => {
+  const movedWidget: WidgetType = JSON.parse(JSON.stringify(widget))
+  movedWidget.x += cursorPosition.x
+  movedWidget.y += cursorPosition.y
+  const movedRangeWidgets = coordinateRangeWidgets(
+    widgets,
+    { x: movedWidget.x, y: movedWidget.y },
+    { x: movedWidget.x + movedWidget.w, y: movedWidget.y + movedWidget.h }
+  ).filter(ele => ele.uuid !== widget.uuid)
+  if (
+    movedRangeWidgets.length === 0 &&
+    movedWidget.x >= 0 &&
+    movedWidget.y >= 0 &&
+    movedWidget.x < 5 &&
+    movedWidget.y < 3
+  ) {
+    return true //빈 공간으로 이동할 수 있음
+  }
+  return false //빈공간으로 이동 할 수 없음
+}

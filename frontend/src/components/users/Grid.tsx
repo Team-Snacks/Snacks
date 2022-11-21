@@ -3,7 +3,7 @@ import { rectSwappingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { Widget } from 'components/widgets/Widget'
 import { Coordinate, Widgets, WidgetType } from 'common'
 import { createRef, LegacyRef, useState } from 'react'
-import { coordinateRangeWidgets } from './GridTools'
+import { moveItemEmpty, moveItemSwap } from './GridTools'
 
 export const Grid = ({ widgets }: { widgets: Widgets }) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -115,67 +115,25 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
   //     return true
   //   } else return false
   // }
-  //위젯 둘을 서로 교환한다. [완료][주기능]
-  const moveItemSwap = (widget: WidgetType) => {
-    //1. cursorPosition를 통해 교환할 위젯을 찾는다. 이동하려는 좌표에 위치하고, w h 크기가 같아야 함.
-    //2. 조건이 맞으면 교환 후 true, 실패하면 false
-    const swapRange = coordinateRangeWidgets(
-      widgets,
-      {
-        x: widget.x + cursorPosition.x,
-        y: widget.y + cursorPosition.y,
-      },
-      {
-        x: widget.x + widget.w + cursorPosition.x,
-        y: widget.y + widget.h + cursorPosition.y,
-      }
-    ).filter(ele => ele.uuid !== widget.uuid)
-    if (
-      swapRange.length === 1 &&
-      swapRange[0].w === widget.w &&
-      swapRange[0].h === widget.h
-    ) {
-      const swapWidget = widgets.find(ele => {
-        return ele.uuid === swapRange[0].uuid
-      })
-      if (!swapWidget) return false
-      const swapCoords: Coordinate = { x: swapWidget.x, y: swapWidget.y }
-      swapWidget.x = widget.x
-      swapWidget.y = widget.y
-      widget.x = swapCoords.x
-      widget.y = swapCoords.y
-      return true
-    }
-    return false
-  }
-  //빈 곳으로 위젯을 이동한다 [완료] [주기능]
-  const moveItemEmpty = (widget: WidgetType) => {
-    const movedWidget: WidgetType = JSON.parse(JSON.stringify(widget))
-    movedWidget.x += cursorPosition.x
-    movedWidget.y += cursorPosition.y
-    const movedRangeWidgets = coordinateRangeWidgets(
-      widgets,
-      { x: movedWidget.x, y: movedWidget.y },
-      { x: movedWidget.x + movedWidget.w, y: movedWidget.y + movedWidget.h }
-    ).filter(ele => ele.uuid !== widget.uuid)
-    if (
-      movedRangeWidgets.length === 0 &&
-      movedWidget.x >= 0 &&
-      movedWidget.y >= 0 &&
-      movedWidget.x < 5 &&
-      movedWidget.y < 3
-    ) {
-      widget.x += cursorPosition.x
-      widget.y += cursorPosition.y
-      return true //빈 공간으로 이동함
-    }
-    return false //빈공간으로 이동 할 수 없음
-  }
+
   //이동 알고리즘 들어가는 함수 [주기능]
   const moveItem = (index: number) => {
-    if (moveItemEmpty(widgets[index]) === true) return //빈 공간일 경우
-    //if (moveItemPush(widgets[index]) === true) return//push할 수 있는 경우
-    if (moveItemSwap(widgets[index]) === true) return //swap할 수 있는 경우
+    //빈 공간일 경우
+    if (moveItemEmpty(widgets[index], cursorPosition, widgets) !== false) {
+      widgets[index].x += cursorPosition.x
+      widgets[index].y += cursorPosition.y
+      return
+    }
+    //swap할 수 있는 경우
+    const swapWidget = moveItemSwap(widgets[index], cursorPosition, widgets)
+    if (swapWidget !== false) {
+      const swapCoords: Coordinate = { x: swapWidget.x, y: swapWidget.y }
+      swapWidget.x = widgets[index].x
+      swapWidget.y = widgets[index].y
+      widgets[index].x = swapCoords.x
+      widgets[index].y = swapCoords.y
+      return
+    }
     console.log('이동불가') //불가능
   }
 
