@@ -109,8 +109,8 @@ export const moveItemEmpty = (
     movedRangeWidgets.length === 0 &&
     movedWidget.x >= 0 &&
     movedWidget.y >= 0 &&
-    movedWidget.x < 5 &&
-    movedWidget.y < 3
+    movedWidget.x + movedWidget.w - 1 < 5 &&
+    movedWidget.y + movedWidget.h - 1 < 3
   ) {
     return true //빈 공간으로 이동할 수 있음
   }
