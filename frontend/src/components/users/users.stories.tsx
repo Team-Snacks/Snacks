@@ -18,7 +18,7 @@ const tmpStyle: React.CSSProperties = {
 export const Navigation = tmp
 
 export const grid: Story<{ widgets: Widgets }> = ({ widgets }) => (
-  <Grid gridItems={widgets} />
+  <Grid widgets={widgets} />
 )
 grid.args = { widgets: layoutDummy }
 
