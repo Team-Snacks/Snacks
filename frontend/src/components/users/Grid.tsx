@@ -12,6 +12,7 @@ type Coordinate = {
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
 const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) => {
+  
   const coordList: Coordinate[] = []
   for (let i = 0; i < h; i++) {
     for (let j = 0; j < w; j++) {
