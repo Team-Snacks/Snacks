@@ -81,7 +81,7 @@ export const widgetDummy = {
 // [1][2][2][ ][ ]
 // [3][5][ ][4][4]
 // [3][ ][ ][4][4]
-export const mock = [
+export const mock: Widgets = [
   {
     uuid: 'weather01',
     name: 'weather',

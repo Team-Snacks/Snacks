@@ -22,12 +22,13 @@ export const coordinateRangeWidgets = (
   const permutation = makePermutation(start, end)
 
   const widgetList: Widgets = []
-  widgets.map(ele => {
+  widgets.forEach(ele => {
     const indexCoords = makeWidgetCoordinates(ele)
-    permutation.map(perEle => {
-      indexCoords.map(indexEle => {
-        if (indexEle.x === perEle.x && indexEle.y === perEle.y)
+    permutation.forEach(perEle => {
+      indexCoords.forEach(indexEle => {
+        if (indexEle.x === perEle.x && indexEle.y === perEle.y) {
           widgetList.push(ele)
+        }
       })
     })
   })
