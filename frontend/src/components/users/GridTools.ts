@@ -2,11 +2,13 @@ import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
 import { cartesianProduct, range } from 'utils'
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
-export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) => {
-  // prettier-ignore
-  return cartesianProduct(range(x, x + w), range(y, y + h))
+export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) =>
+  cartesianProduct(range(x, x + w), range(y, y + h)).map(([x, y]) => ({ x, y }))
+
+//prettier-ignore
+export const makePermutation = (start: Coordinate, end: Coordinate) =>
+  cartesianProduct(range(start.x, end.x), range(start.y, end.y))
     .map(([x, y]) => ({ x, y }))
-}
 
 //해당 좌표 범위 내에 존재하고 있는 위젯들의 배열을 반환 [완료][tools]
 export const coordinateRangeWidgets = (
@@ -14,13 +16,9 @@ export const coordinateRangeWidgets = (
   start: Coordinate,
   end: Coordinate
 ) => {
+  const permutation = makePermutation(start, end)
+
   const widgetList: Widgets = []
-  const permutation: Coordinate[] = []
-  for (let i = start.x; i < end.x; i++) {
-    for (let j = start.y; j < end.y; j++) {
-      permutation.push({ x: i, y: j })
-    }
-  }
   widgets.map(ele => {
     const indexCoords = makeWidgetCoordinates(ele)
     permutation.map(perEle => {
