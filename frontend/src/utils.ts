@@ -14,6 +14,12 @@ export const cartesianProduct = <T>(...xs: T[][]) =>
     [[]]
   )
 
+function *rangeIter(start: number, end: number, step: number) {
+  for (let i = start; i < end; i += step) {
+    yield i
+  }
+}
+
 /**
  * 파이썬에서 보던 range 함수
  *
@@ -35,20 +41,15 @@ export const range = (
   switch (args.length) {
     case 1: {
       const [end] = args
-      return end > 0 ? [...Array(end).keys()] : []
+      return [...rangeIter(0, end, 1)]
     }
     case 2: {
       const [start, end] = args
-      const len = end - start
-      return len > 0 ? [...Array(len).keys()].map(i => i + start) : []
+      return [...rangeIter(start, end, 1)]
     }
     case 3: {
       const [start, end, step] = args
-      const res = []
-      for (let i = start; i < end; i += step) {
-        res.push(i)
-      }
-      return res
+      return [...rangeIter(start, end, step)]
     }
   }
 }
