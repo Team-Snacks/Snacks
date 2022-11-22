@@ -14,7 +14,7 @@ export const cartesianProduct = <T>(...xs: T[][]) =>
     [[]]
   )
 
-function *rangeIter(start: number, end: number, step: number) {
+function* rangeIter(start: number, end: number, step: number) {
   for (let i = start; i < end; i += step) {
     yield i
   }
@@ -53,3 +53,16 @@ export const range = (
     }
   }
 }
+
+/**
+ * 독립된 원소를 N번 반복하는 배열 생성
+ *
+ * @example
+ * ```ts
+ * replicate(5, () => 3) // [3, 3, 3, 3, 3]
+ * replicate(3, () => 'a') // ['a', 'a', 'a']
+ * replicate(2, () => [1, 2]) // [[1, 2], [1, 2]]
+ * ```
+ */
+export const replicate = <T>(count: number, fn: () => T): T[] =>
+  [...Array(count)].map(fn)

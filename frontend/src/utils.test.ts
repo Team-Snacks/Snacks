@@ -1,4 +1,4 @@
-import { cartesianProduct, range } from 'utils'
+import { cartesianProduct, range, replicate } from 'utils'
 import { describe, expect, test } from 'vitest'
 
 describe('cartesianProduct', () => {
@@ -55,5 +55,23 @@ describe('range', () => {
     'range($start, $end, $step) -> [$expected]',
     ({ start, end, step, expected }) =>
       expect(range(start, end, step)).toEqual(expected)
+  )
+})
+
+describe('replicate', () => {
+  test.each([{ fn: () => 3, expected: [3, 3, 3] }])(
+    'replicate(3, $fn) -> [$expected]',
+    ({ fn, expected }) => expect(replicate(3, fn)).toEqual(expected)
+  )
+
+  test.each([{ fn: () => 'string', expected: ['string', 'string', 'string'] }])(
+    'replicate(3, $fn) -> [$expected]',
+    ({ fn, expected }) => expect(replicate(3, fn)).toEqual(expected)
+  )
+
+  // prettier-ignore
+  test.each([{ fn: () => [1, 2, 3], expected: [[1, 2, 3], [1, 2, 3], [1, 2, 3]] }])(
+    'replicate(3, $fn) -> [$expected]',
+    ({ fn, expected }) => expect(replicate(3, fn)).toEqual(expected)
   )
 })
