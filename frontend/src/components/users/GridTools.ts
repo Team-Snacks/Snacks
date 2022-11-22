@@ -1,6 +1,6 @@
 import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
 import { widget } from 'components/widgets/widgets.stories'
-import { cartesianProduct, range } from 'utils'
+import { cartesianProduct, range, replicate } from 'utils'
 
 export const gridSize = { w: 5, h: 3 } as const
 
@@ -36,18 +36,16 @@ export const coordinateRangeWidgets = (
 }
 //위젯들을 기반으로 위젯이 채워진 좌표계를 만듦 [완료][tools]
 export const makeGridCoordinates = (widgets: Widgets) => {
-  const newGridCoordinates: Array<{ uuid: string }[]> = new Array(gridSize.w)
-  for (let i = 0; i < gridSize.w; i++) {
-    newGridCoordinates[i] = new Array(gridSize.h)
-    newGridCoordinates[i].fill({ uuid: 'empty' })
-  }
-  widgets.map(ele => {
+  const rows = () => replicate(gridSize.h, () => ({ uuid: 'empty' }))
+  const result = replicate(gridSize.w, rows)
+
+  widgets.forEach(ele => {
     const eleCoordinate = makeWidgetCoordinates(ele)
-    eleCoordinate.map(eleEle => {
-      newGridCoordinates[eleEle.x][eleEle.y] = { uuid: ele.uuid }
-    })
+    eleCoordinate.forEach(
+      eleEle => (result[eleEle.x][eleEle.y] = { uuid: ele.uuid })
+    )
   })
-  return newGridCoordinates
+  return result
 }
 //위젯을 옮길 경우 차지하게 될 좌표 배열을 반환 [tools]
 // export const makeMoveCoordinates = (
