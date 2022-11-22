@@ -50,7 +50,7 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
     }
     //swap할 수 있는 경우
     const swapWidget = moveItemSwap(widgets[index], cursorPosition, widgets)
-    if (swapWidget !== false) {
+    if (swapWidget !== null) {
       const swapCoords: Coordinate = { x: swapWidget.x, y: swapWidget.y }
       swapWidget.x = widgets[index].x
       swapWidget.y = widgets[index].y
