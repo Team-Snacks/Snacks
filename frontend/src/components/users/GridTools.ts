@@ -1,4 +1,5 @@
 import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
+import { widget } from 'components/widgets/widgets.stories'
 import { cartesianProduct, range } from 'utils'
 
 export const gridSize = { w: 5, h: 3 } as const
@@ -48,11 +49,11 @@ export const makeGridCoordinates = (widgets: Widgets) => {
   return newGridCoordinates
 }
 //위젯을 옮길 경우 차지하게 될 좌표 배열을 반환 [tools]
-export const makeMoveCoordinates = (
-  widgets: Widgets,
-  index: number,
-  coord: Coordinate
-) => {}
+// export const makeMoveCoordinates = (
+//   widgets: Widgets,
+//   index: number,
+//   coord: Coordinate
+// ) => {}
 
 //위젯을 교환할 수 있는지 여부를 확인해 교환할 위젯 또는 false를 반환. [완료][주기능]
 export const moveItemSwap = (
@@ -87,27 +88,28 @@ export const moveItemSwap = (
   return false
 }
 //빈 곳으로 위젯을 이동할 지 여부를 반환한다 [완료] [주기능]
-export const moveItemEmpty = (
+export const isMovable = (
   widget: WidgetType,
   cursorPosition: Coordinate,
   widgets: Widgets
 ) => {
-  const movedWidget: WidgetType = JSON.parse(JSON.stringify(widget))
-  movedWidget.x += cursorPosition.x
-  movedWidget.y += cursorPosition.y
+  let movedWidget: WidgetType = {
+    ...widget,
+    x: widget.x + cursorPosition.x,
+    y: widget.y + cursorPosition.y,
+  }
+
   const movedRangeWidgets = coordinateRangeWidgets(
     widgets,
     { x: movedWidget.x, y: movedWidget.y },
     { x: movedWidget.x + movedWidget.w, y: movedWidget.y + movedWidget.h }
   ).filter(ele => ele.uuid !== widget.uuid)
-  if (
+
+  return (
     movedRangeWidgets.length === 0 &&
     movedWidget.x >= 0 &&
     movedWidget.y >= 0 &&
     movedWidget.x + movedWidget.w - 1 < gridSize.w &&
     movedWidget.y + movedWidget.h - 1 < gridSize.h
-  ) {
-    return true //빈 공간으로 이동할 수 있음
-  }
-  return false //빈공간으로 이동 할 수 없음
+  )
 }

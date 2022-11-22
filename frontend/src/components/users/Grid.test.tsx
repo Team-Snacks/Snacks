@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { moveItemEmpty, moveItemSwap } from './GridTools'
+import { isMovable, moveItemSwap } from './GridTools'
 import {
   coordinateRangeWidgets,
   makeGridCoordinates,
@@ -120,27 +120,27 @@ test('moveItemSwap 테스트', () => {
 
 test('moveItemEmpty 테스트', () => {
   expect(
-    moveItemEmpty(gridRandomSizes[0], { x: 1, y: 1 }, gridRandomSizes)
+    isMovable(gridRandomSizes[0], { x: 1, y: 1 }, gridRandomSizes)
   ).toEqual(false)
   expect(
-    moveItemEmpty(gridRandomSizes[0], { x: 1, y: 0 }, gridRandomSizes)
+    isMovable(gridRandomSizes[0], { x: 1, y: 0 }, gridRandomSizes)
   ).toEqual(false)
   expect(
-    moveItemEmpty(gridRandomSizes[0], { x: 0, y: 1 }, gridRandomSizes)
+    isMovable(gridRandomSizes[0], { x: 0, y: 1 }, gridRandomSizes)
   ).toEqual(false)
   expect(
-    moveItemEmpty(gridRandomSizes[0], { x: 2, y: 2 }, gridRandomSizes)
+    isMovable(gridRandomSizes[0], { x: 2, y: 2 }, gridRandomSizes)
   ).toEqual(true)
   expect(
-    moveItemEmpty(gridRandomSizes[1], { x: 1, y: 0 }, gridRandomSizes)
+    isMovable(gridRandomSizes[1], { x: 1, y: 0 }, gridRandomSizes)
   ).toEqual(true)
   expect(
-    moveItemEmpty(gridRandomSizes[2], { x: 2, y: 0 }, gridRandomSizes)
+    isMovable(gridRandomSizes[2], { x: 2, y: 0 }, gridRandomSizes)
   ).toEqual(true)
   expect(
-    moveItemEmpty(gridRandomSizes[3], { x: 0, y: -1 }, gridRandomSizes)
+    isMovable(gridRandomSizes[3], { x: 0, y: -1 }, gridRandomSizes)
   ).toEqual(true)
   expect(
-    moveItemEmpty(gridRandomSizes[4], { x: 1, y: 0 }, gridRandomSizes)
+    isMovable(gridRandomSizes[4], { x: 1, y: 0 }, gridRandomSizes)
   ).toEqual(true)
 })
