@@ -7,38 +7,24 @@ import {
 } from './GridTools'
 import { mock } from 'dummy'
 
-test('makeWidgetCoordinates', () => {
-  expect(makeWidgetCoordinates(mock[0])).toEqual([{ x: 0, y: 0 }])
-  expect(makeWidgetCoordinates(mock[1])).toEqual([
-    { x: 1, y: 0 },
-    { x: 2, y: 0 },
-  ])
-  expect(makeWidgetCoordinates(mock[2])).toEqual([
-    { x: 0, y: 1 },
-    { x: 0, y: 2 },
-  ])
-  expect(makeWidgetCoordinates(mock[3])).toEqual([
-    { x: 3, y: 1 },
-    { x: 3, y: 2 },
-    { x: 4, y: 1 },
-    { x: 4, y: 2 },
-  ])
-})
+test.each(
+  // prettier-ignore
+  [{ widget: mock[0], res: [{ x: 0, y: 0 }] },
+  { widget: mock[1], res: [{ x: 1, y: 0 }, { x: 2, y: 0 }] },
+  { widget: mock[2], res: [{ x: 0, y: 1 }, { x: 0, y: 2 }] },
+  { widget: mock[3], res: [{ x: 3, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 1 }, { x: 4, y: 2 }] }]
+)('makeWidgetCoordinates($widget) -> [$res]', ({ widget, res }) =>
+  expect(makeWidgetCoordinates(widget)).toEqual(res)
+)
 
-test('coordinateRangeWidgets', () => {
-  expect(coordinateRangeWidgets(mock, { x: 0, y: 0 }, { x: 1, y: 1 })).toEqual([
-    mock[0],
-  ])
-  expect(coordinateRangeWidgets(mock, { x: 0, y: 0 }, { x: 2, y: 2 })).toEqual([
-    mock[0],
-    mock[1],
-    mock[2],
-    mock[4],
-  ])
-  expect(coordinateRangeWidgets(mock, { x: 2, y: 2 }, { x: 3, y: 3 })).toEqual(
-    []
-  )
-})
+test.each(
+  // prettier-ignore
+  [{ start: { x: 0, y: 0 }, end: { x: 1, y: 1 }, res: [mock[0]] },
+  { start: { x: 0, y: 0 }, end: { x: 2, y: 2 }, res: [mock[0], mock[1], mock[2], mock[4]] },
+  { start: { x: 2, y: 2 }, end: { x: 3, y: 3 }, res: []}]
+)('coordinateRangeWidgets($start, $end) -> [$res]', ({ start, end, res }) =>
+  expect(coordinateRangeWidgets(mock, start, end)).toEqual(res)
+)
 
 test('makeGridCoordinates', () => {
   expect(makeGridCoordinates(mock)).toEqual([
@@ -50,20 +36,24 @@ test('makeGridCoordinates', () => {
   ])
 })
 
-test('moveItemSwap', () => {
-  expect(moveItemSwap(mock[0], { x: 1, y: 1 }, mock)).toEqual(mock[4])
-  expect(moveItemSwap(mock[0], { x: 1, y: 0 }, mock)).toEqual(false)
-  expect(moveItemSwap(mock[0], { x: 0, y: 1 }, mock)).toEqual(false)
-  expect(moveItemSwap(mock[0], { x: 2, y: 2 }, mock)).toEqual(false)
-})
+test.each([
+  { pos: { x: 1, y: 1 }, res: mock[4] },
+  { pos: { x: 1, y: 0 }, res: false },
+  { pos: { x: 0, y: 1 }, res: false },
+  { pos: { x: 2, y: 2 }, res: false },
+])('moveItemSwap(mock[0], $pos, mock) -> [$res]', ({ pos, res }) =>
+  expect(moveItemSwap(mock[0], pos, mock)).toEqual(res)
+)
 
-test('moveItemEmpty', () => {
-  expect(isMovable(mock[0], { x: 1, y: 1 }, mock)).toEqual(false)
-  expect(isMovable(mock[0], { x: 1, y: 0 }, mock)).toEqual(false)
-  expect(isMovable(mock[0], { x: 0, y: 1 }, mock)).toEqual(false)
-  expect(isMovable(mock[0], { x: 2, y: 2 }, mock)).toEqual(true)
-  expect(isMovable(mock[1], { x: 1, y: 0 }, mock)).toEqual(true)
-  expect(isMovable(mock[2], { x: 2, y: 0 }, mock)).toEqual(true)
-  expect(isMovable(mock[3], { x: 0, y: -1 }, mock)).toEqual(true)
-  expect(isMovable(mock[4], { x: 1, y: 0 }, mock)).toEqual(true)
-})
+test.each([
+  { item: mock[0], pos: { x: 1, y: 1 }, res: false },
+  { item: mock[0], pos: { x: 1, y: 0 }, res: false },
+  { item: mock[0], pos: { x: 0, y: 1 }, res: false },
+  { item: mock[0], pos: { x: 2, y: 2 }, res: true },
+  { item: mock[1], pos: { x: 1, y: 0 }, res: true },
+  { item: mock[2], pos: { x: 2, y: 0 }, res: true },
+  { item: mock[3], pos: { x: 0, y: -1 }, res: true },
+  { item: mock[4], pos: { x: 1, y: 0 }, res: true },
+])('isMovable($item, $pos, mock) -> [$res]', ({ item, pos, res }) =>
+  expect(isMovable(item, pos, mock)).toEqual(res)
+)
