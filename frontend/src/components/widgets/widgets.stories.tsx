@@ -2,7 +2,7 @@ import { Widgets, WidgetType } from 'common'
 import { Weather } from './Weather'
 import { Widget } from './Widget'
 import type { Story } from '@ladle/react'
-import { layoutDummy, widgetDummy } from 'Dummy'
+import { layoutDummy, widgetDummy } from 'dummy'
 
 export const weather: Story<{ widget: WidgetType }> = ({ widget }) => (
   <Weather widgetData={widget} />

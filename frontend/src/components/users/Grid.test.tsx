@@ -5,70 +5,19 @@ import {
   makeGridCoordinates,
   makeWidgetCoordinates,
 } from './GridTools'
+import { mock } from 'dummy'
 
-// 이런 모양입니다
-// [1][2][2][ ][ ]
-// [3][5][ ][4][4]
-// [3][ ][ ][4][4]
-const gridRandomSizes = [
-  {
-    uuid: 'weather01',
-    name: 'weather',
-    x: 0,
-    y: 0,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: 'memo02',
-    name: 'memo',
-    x: 1,
-    y: 0,
-    w: 2,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: 'weather03',
-    name: 'weather',
-    x: 0,
-    y: 1,
-    w: 1,
-    h: 2,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: 'ascii04',
-    name: 'ascii',
-    x: 3,
-    y: 1,
-    w: 2,
-    h: 2,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-  {
-    uuid: 'todo05',
-    name: 'todo',
-    x: 1,
-    y: 1,
-    w: 1,
-    h: 1,
-    data: JSON.parse('{"aa" : "bb"}'),
-  },
-]
-
-test('makeWidgetCoordinates 테스트', () => {
-  expect(makeWidgetCoordinates(gridRandomSizes[0])).toEqual([{ x: 0, y: 0 }])
-  expect(makeWidgetCoordinates(gridRandomSizes[1])).toEqual([
+test('makeWidgetCoordinates', () => {
+  expect(makeWidgetCoordinates(mock[0])).toEqual([{ x: 0, y: 0 }])
+  expect(makeWidgetCoordinates(mock[1])).toEqual([
     { x: 1, y: 0 },
     { x: 2, y: 0 },
   ])
-  expect(makeWidgetCoordinates(gridRandomSizes[2])).toEqual([
+  expect(makeWidgetCoordinates(mock[2])).toEqual([
     { x: 0, y: 1 },
     { x: 0, y: 2 },
   ])
-  expect(makeWidgetCoordinates(gridRandomSizes[3])).toEqual([
+  expect(makeWidgetCoordinates(mock[3])).toEqual([
     { x: 3, y: 1 },
     { x: 3, y: 2 },
     { x: 4, y: 1 },
@@ -76,25 +25,23 @@ test('makeWidgetCoordinates 테스트', () => {
   ])
 })
 
-test('coordinateRangeWidgets 테스트', () => {
-  expect(
-    coordinateRangeWidgets(gridRandomSizes, { x: 0, y: 0 }, { x: 1, y: 1 })
-  ).toEqual([gridRandomSizes[0]])
-  expect(
-    coordinateRangeWidgets(gridRandomSizes, { x: 0, y: 0 }, { x: 2, y: 2 })
-  ).toEqual([
-    gridRandomSizes[0],
-    gridRandomSizes[1],
-    gridRandomSizes[2],
-    gridRandomSizes[4],
+test('coordinateRangeWidgets', () => {
+  expect(coordinateRangeWidgets(mock, { x: 0, y: 0 }, { x: 1, y: 1 })).toEqual([
+    mock[0],
   ])
-  expect(
-    coordinateRangeWidgets(gridRandomSizes, { x: 2, y: 2 }, { x: 3, y: 3 })
-  ).toEqual([])
+  expect(coordinateRangeWidgets(mock, { x: 0, y: 0 }, { x: 2, y: 2 })).toEqual([
+    mock[0],
+    mock[1],
+    mock[2],
+    mock[4],
+  ])
+  expect(coordinateRangeWidgets(mock, { x: 2, y: 2 }, { x: 3, y: 3 })).toEqual(
+    []
+  )
 })
 
-test('makeGridCoordinates 테스트', () => {
-  expect(makeGridCoordinates(gridRandomSizes)).toEqual([
+test('makeGridCoordinates', () => {
+  expect(makeGridCoordinates(mock)).toEqual([
     [{ uuid: 'weather01' }, { uuid: 'weather03' }, { uuid: 'weather03' }],
     [{ uuid: 'memo02' }, { uuid: 'todo05' }, { uuid: 'empty' }],
     [{ uuid: 'memo02' }, { uuid: 'empty' }, { uuid: 'empty' }],
@@ -103,44 +50,20 @@ test('makeGridCoordinates 테스트', () => {
   ])
 })
 
-test('moveItemSwap 테스트', () => {
-  expect(
-    moveItemSwap(gridRandomSizes[0], { x: 1, y: 1 }, gridRandomSizes)
-  ).toEqual(gridRandomSizes[4])
-  expect(
-    moveItemSwap(gridRandomSizes[0], { x: 1, y: 0 }, gridRandomSizes)
-  ).toEqual(false)
-  expect(
-    moveItemSwap(gridRandomSizes[0], { x: 0, y: 1 }, gridRandomSizes)
-  ).toEqual(false)
-  expect(
-    moveItemSwap(gridRandomSizes[0], { x: 2, y: 2 }, gridRandomSizes)
-  ).toEqual(false)
+test('moveItemSwap', () => {
+  expect(moveItemSwap(mock[0], { x: 1, y: 1 }, mock)).toEqual(mock[4])
+  expect(moveItemSwap(mock[0], { x: 1, y: 0 }, mock)).toEqual(false)
+  expect(moveItemSwap(mock[0], { x: 0, y: 1 }, mock)).toEqual(false)
+  expect(moveItemSwap(mock[0], { x: 2, y: 2 }, mock)).toEqual(false)
 })
 
-test('moveItemEmpty 테스트', () => {
-  expect(
-    isMovable(gridRandomSizes[0], { x: 1, y: 1 }, gridRandomSizes)
-  ).toEqual(false)
-  expect(
-    isMovable(gridRandomSizes[0], { x: 1, y: 0 }, gridRandomSizes)
-  ).toEqual(false)
-  expect(
-    isMovable(gridRandomSizes[0], { x: 0, y: 1 }, gridRandomSizes)
-  ).toEqual(false)
-  expect(
-    isMovable(gridRandomSizes[0], { x: 2, y: 2 }, gridRandomSizes)
-  ).toEqual(true)
-  expect(
-    isMovable(gridRandomSizes[1], { x: 1, y: 0 }, gridRandomSizes)
-  ).toEqual(true)
-  expect(
-    isMovable(gridRandomSizes[2], { x: 2, y: 0 }, gridRandomSizes)
-  ).toEqual(true)
-  expect(
-    isMovable(gridRandomSizes[3], { x: 0, y: -1 }, gridRandomSizes)
-  ).toEqual(true)
-  expect(
-    isMovable(gridRandomSizes[4], { x: 1, y: 0 }, gridRandomSizes)
-  ).toEqual(true)
+test('moveItemEmpty', () => {
+  expect(isMovable(mock[0], { x: 1, y: 1 }, mock)).toEqual(false)
+  expect(isMovable(mock[0], { x: 1, y: 0 }, mock)).toEqual(false)
+  expect(isMovable(mock[0], { x: 0, y: 1 }, mock)).toEqual(false)
+  expect(isMovable(mock[0], { x: 2, y: 2 }, mock)).toEqual(true)
+  expect(isMovable(mock[1], { x: 1, y: 0 }, mock)).toEqual(true)
+  expect(isMovable(mock[2], { x: 2, y: 0 }, mock)).toEqual(true)
+  expect(isMovable(mock[3], { x: 0, y: -1 }, mock)).toEqual(true)
+  expect(isMovable(mock[4], { x: 1, y: 0 }, mock)).toEqual(true)
 })
