@@ -69,9 +69,16 @@ describe('replicate', () => {
     ({ fn, expected }) => expect(replicate(3, fn)).toEqual(expected)
   )
 
-  // prettier-ignore
-  test.each([{ fn: () => [1, 2, 3], expected: [[1, 2, 3], [1, 2, 3], [1, 2, 3]] }])(
-    'replicate(3, $fn) -> [$expected]',
-    ({ fn, expected }) => expect(replicate(3, fn)).toEqual(expected)
-  )
+  test.each(
+    // prettier-ignore
+    [{ fn: () => [1, 2, 3], expected: [[1, 2, 3], [1, 2, 3], [1, 2, 3]] }]
+  )('replicate(3, $fn) -> [$expected]', ({ fn, expected }) => {
+    const gen = replicate(3, fn)
+    expect(gen).toEqual(expected)
+
+    const [first, second, third] = gen
+    expect(first).toSatisfy(x => x !== second && x !== third)
+    expect(second).toSatisfy(x => x !== first && x !== third)
+    expect(third).toSatisfy(x => x !== first && x !== second)
+  })
 })

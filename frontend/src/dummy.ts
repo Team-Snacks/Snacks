@@ -76,7 +76,6 @@ export const widgetDummy = {
   data: JSON.parse('{"aa" : "bb"}'),
 }
 
-
 // 이런 모양입니다
 // [1][2][2][ ][ ]
 // [3][5][ ][4][4]

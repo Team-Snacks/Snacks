@@ -55,13 +55,26 @@ export const range = (
 }
 
 /**
- * 독립된 원소를 N번 반복하는 배열 생성
+ * 깊은 복사된 원소를 N번 반복하는 배열 생성
  *
  * @example
  * ```ts
  * replicate(5, () => 3) // [3, 3, 3, 3, 3]
  * replicate(3, () => 'a') // ['a', 'a', 'a']
- * replicate(2, () => [1, 2]) // [[1, 2], [1, 2]]
+ * ```
+ *
+ * 얕은 복사의 예:
+ * @example
+ * ```ts
+ * const arr = [1, 2]
+ * const foo = [arr, arr]
+ * foo[0] === foo[1] // true
+ *```
+ * 깊은 복사의 예:
+ * @example
+ * ```ts
+ * const bar = replicate(2, () => [1, 2]) // [[1, 2], [1, 2]]
+ * bar[0] === foo[1] // false
  * ```
  */
 export const replicate = <T>(count: number, fn: () => T): T[] =>
