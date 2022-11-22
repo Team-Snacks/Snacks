@@ -6,7 +6,7 @@ export const gridSize = { w: 5, h: 3 } as const
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
 export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) =>
-  cartesianProduct(range(x, x + w), range(y, y + h)).map(([x, y]) => ({ x, y }))
+  makePermutation({ x, y }, { x: x + w, y: y + h })
 
 //prettier-ignore
 export const makePermutation = (start: Coordinate, end: Coordinate) =>
@@ -80,13 +80,9 @@ export const moveItemSwap = (
     swapRange[0].w === widget.w &&
     swapRange[0].h === widget.h
   ) {
-    const swapWidget = widgets.find(ele => {
-      return ele.uuid === swapRange[0].uuid
-    })
-    if (!swapWidget) return false
-    else return swapWidget
+    return widgets.find(ele => ele.uuid === swapRange[0].uuid) ?? null
   }
-  return false
+  return null
 }
 //빈 곳으로 위젯을 이동할 지 여부를 반환한다 [완료] [주기능]
 export const isMovable = (

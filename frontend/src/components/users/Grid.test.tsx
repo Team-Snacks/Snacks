@@ -38,9 +38,9 @@ test('makeGridCoordinates', () => {
 
 test.each([
   { pos: { x: 1, y: 1 }, res: mock[4] },
-  { pos: { x: 1, y: 0 }, res: false },
-  { pos: { x: 0, y: 1 }, res: false },
-  { pos: { x: 2, y: 2 }, res: false },
+  { pos: { x: 1, y: 0 }, res: null },
+  { pos: { x: 0, y: 1 }, res: null },
+  { pos: { x: 2, y: 2 }, res: null },
 ])('moveItemSwap(mock[0], $pos, mock) -> [$res]', ({ pos, res }) =>
   expect(moveItemSwap(mock[0], pos, mock)).toEqual(res)
 )
