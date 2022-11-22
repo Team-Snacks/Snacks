@@ -1,6 +1,8 @@
 import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
 import { cartesianProduct, range } from 'utils'
 
+export const gridSize = { w: 5, h: 3 } as const
+
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
 export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) =>
   cartesianProduct(range(x, x + w), range(y, y + h)).map(([x, y]) => ({ x, y }))
@@ -32,9 +34,9 @@ export const coordinateRangeWidgets = (
 }
 //위젯들을 기반으로 위젯이 채워진 좌표계를 만듦 [완료][tools]
 export const makeGridCoordinates = (widgets: Widgets) => {
-  const newGridCoordinates: Array<{ uuid: string }[]> = new Array(5)
-  for (let i = 0; i < 5; i++) {
-    newGridCoordinates[i] = new Array(3)
+  const newGridCoordinates: Array<{ uuid: string }[]> = new Array(gridSize.w)
+  for (let i = 0; i < gridSize.w; i++) {
+    newGridCoordinates[i] = new Array(gridSize.h)
     newGridCoordinates[i].fill({ uuid: 'empty' })
   }
   widgets.map(ele => {
@@ -102,8 +104,8 @@ export const moveItemEmpty = (
     movedRangeWidgets.length === 0 &&
     movedWidget.x >= 0 &&
     movedWidget.y >= 0 &&
-    movedWidget.x + movedWidget.w - 1 < 5 &&
-    movedWidget.y + movedWidget.h - 1 < 3
+    movedWidget.x + movedWidget.w - 1 < gridSize.w &&
+    movedWidget.y + movedWidget.h - 1 < gridSize.h
   ) {
     return true //빈 공간으로 이동할 수 있음
   }

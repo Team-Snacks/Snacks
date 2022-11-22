@@ -1,9 +1,9 @@
 import { DndContext, DragEndEvent, DragMoveEvent } from '@dnd-kit/core'
 import { rectSwappingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { Widget } from 'components/widgets/Widget'
-import { Coordinate, Widgets, WidgetType } from 'common'
+import { Coordinate, Widgets } from 'common'
 import { createRef, LegacyRef, useState } from 'react'
-import { moveItemEmpty, moveItemSwap } from './GridTools'
+import { gridSize, moveItemEmpty, moveItemSwap } from './GridTools'
 
 export const Grid = ({ widgets }: { widgets: Widgets }) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -13,7 +13,7 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
     display: 'inline-grid',
     width: '100%',
     height: '80vh',
-    gridTemplateColumns: 'repeat(5, 1fr)',
+    gridTemplateColumns: `repeat(${gridSize.w}, 1fr)`,
     gridGap: 10,
   }
   //state cursorPosition을 기반으로 위젯을 이동한다 [완료][핸들러]
@@ -27,8 +27,12 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
   const handleDragMove = (event: DragMoveEvent) => {
     if (gridRef.current) {
       setCursorPosition({
-        x: Math.round(event.delta.x / (gridRef.current.offsetWidth / 5)),
-        y: Math.round(event.delta.y / (gridRef.current.offsetHeight / 3)),
+        x: Math.round(
+          event.delta.x / (gridRef.current.offsetWidth / gridSize.w)
+        ),
+        y: Math.round(
+          event.delta.y / (gridRef.current.offsetHeight / gridSize.h)
+        ),
       })
     }
     //delta값에 얼마나 움직였는지 정보가 담겨있고
