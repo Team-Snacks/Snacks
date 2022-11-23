@@ -1,5 +1,6 @@
-name: 할 일
-description: 문서 작업, 문서 변경, 코드 단순 변경, 파일명 변경 등 코드 외적인 모든 할 일에 대한 이슈.
+name: CI/CD
+description: CI/CD 파이프라인 관련 이슈
+labels: ["CI/CD"]
 
 body:
   - type: textarea

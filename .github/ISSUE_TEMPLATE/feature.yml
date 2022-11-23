@@ -12,3 +12,8 @@ body:
       label: 프로세스
       description: 필요한 기능을 구현할 프로세스를 적어주세요.
       value: "- "
+  - type: input
+    attributes:
+      label: 노션 페이지
+      description: 연결된 노션 페이지 주소를 입력해주세요.
+      placeholder: notion.so
