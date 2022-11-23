@@ -3,7 +3,7 @@ import { rectSwappingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { Widget } from 'components/widgets/Widget'
 import { Coordinate, Widgets } from 'common'
 import { createRef, LegacyRef, useState } from 'react'
-import { gridSize, isMovable, moveItemSwap } from './GridTools'
+import { gridSize, movableToEmpty, moveItemSwap } from './GridTools'
 
 export const Grid = ({ widgets }: { widgets: Widgets }) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
@@ -43,7 +43,7 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
   //이동 알고리즘 들어가는 함수 [주기능]
   const moveItem = (index: number) => {
     //빈 공간일 경우
-    if (isMovable(widgets[index], cursorPosition, widgets) !== false) {
+    if (movableToEmpty(widgets[index], cursorPosition, widgets) !== false) {
       widgets[index].x += cursorPosition.x
       widgets[index].y += cursorPosition.y
       return

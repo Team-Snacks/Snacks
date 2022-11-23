@@ -1,3 +1,4 @@
+import { Footer } from '@mantine/core'
 import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
 import { widget } from 'components/widgets/widgets.stories'
 import { cartesianProduct, range, replicate } from 'utils'
@@ -83,7 +84,7 @@ export const moveItemSwap = (
   return null
 }
 //빈 곳으로 위젯을 이동할 지 여부를 반환한다 [완료] [주기능]
-export const isMovable = (
+export const movableToEmpty = (
   widget: WidgetType,
   cursorPosition: Coordinate,
   widgets: Widgets

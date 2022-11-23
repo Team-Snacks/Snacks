@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { isMovable, moveItemSwap } from './GridTools'
+import { movableToEmpty as isMovableToEmpty, moveItemSwap } from './GridTools'
 import {
   coordinateRangeWidgets,
   makeGridCoordinates,
@@ -54,6 +54,6 @@ test.each([
   { item: mock[2], pos: { x: 2, y: 0 }, res: true },
   { item: mock[3], pos: { x: 0, y: -1 }, res: true },
   { item: mock[4], pos: { x: 1, y: 0 }, res: true },
-])('isMovable($item, $pos, mock) -> [$res]', ({ item, pos, res }) =>
-  expect(isMovable(item, pos, mock)).toEqual(res)
+])('isMovableToEmpty($item, $pos, mock) -> [$res]', ({ item, pos, res }) =>
+  expect(isMovableToEmpty(item, pos, mock)).toEqual(res)
 )
