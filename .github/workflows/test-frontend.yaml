@@ -1,17 +1,22 @@
+name: 프론트엔드 테스트
+
 on:
   workflow_dispatch:
   push:
     paths:
-      - 'frontend/**'
-      - 'workflows/test-frontend.yaml'
+      - frontend/**
+      - workflows/test-frontend.yaml
   pull_request_target:
     paths:
-      - 'frontend/**'
-      - 'workflows/test-frontend.yaml'
+      - frontend/**
+      - workflows/test-frontend.yaml
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./frontend
 
     steps:
       - name: 체크아웃
