@@ -1,33 +1,28 @@
-import { Coordinate, Widgets, WidgetType } from 'common'
+import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
+import { cartesianProduct, range } from 'utils'
+
+export const gridSize = { w: 5, h: 3 } as const
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
-export const makeWidgetCoordinates = (widgets: Widgets, index: number) => {
-  const coordList: Coordinate[] = []
-  for (let i = 0; i < widgets[index].h; i++) {
-    for (let j = 0; j < widgets[index].w; j++) {
-      coordList.push({
-        x: widgets[index].x + j,
-        y: widgets[index].y + i,
-      })
-    }
-  }
-  return coordList
-}
+export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) =>
+  cartesianProduct(range(x, x + w), range(y, y + h)).map(([x, y]) => ({ x, y }))
+
+//prettier-ignore
+export const makePermutation = (start: Coordinate, end: Coordinate) =>
+  cartesianProduct(range(start.x, end.x), range(start.y, end.y))
+    .map(([x, y]) => ({ x, y }))
+
 //해당 좌표 범위 내에 존재하고 있는 위젯들의 배열을 반환 [완료][tools]
 export const coordinateRangeWidgets = (
   widgets: Widgets,
   start: Coordinate,
   end: Coordinate
 ) => {
+  const permutation = makePermutation(start, end)
+
   const widgetList: Widgets = []
-  const permutation: Coordinate[] = []
-  for (let i = start.x; i < end.x; i++) {
-    for (let j = start.y; j < end.y; j++) {
-      permutation.push({ x: i, y: j })
-    }
-  }
-  widgets.map((ele, index) => {
-    const indexCoords = makeWidgetCoordinates(widgets, index)
+  widgets.map(ele => {
+    const indexCoords = makeWidgetCoordinates(ele)
     permutation.map(perEle => {
       indexCoords.map(indexEle => {
         if (indexEle.x === perEle.x && indexEle.y === perEle.y)
@@ -39,13 +34,13 @@ export const coordinateRangeWidgets = (
 }
 //위젯들을 기반으로 위젯이 채워진 좌표계를 만듦 [완료][tools]
 export const makeGridCoordinates = (widgets: Widgets) => {
-  const newGridCoordinates: Array<{ uuid: string }[]> = new Array(5)
-  for (let i = 0; i < 5; i++) {
-    newGridCoordinates[i] = new Array(3)
+  const newGridCoordinates: Array<{ uuid: string }[]> = new Array(gridSize.w)
+  for (let i = 0; i < gridSize.w; i++) {
+    newGridCoordinates[i] = new Array(gridSize.h)
     newGridCoordinates[i].fill({ uuid: 'empty' })
   }
-  widgets.map((ele, index) => {
-    const eleCoordinate = makeWidgetCoordinates(widgets, index)
+  widgets.map(ele => {
+    const eleCoordinate = makeWidgetCoordinates(ele)
     eleCoordinate.map(eleEle => {
       newGridCoordinates[eleEle.x][eleEle.y] = { uuid: ele.uuid }
     })
@@ -109,8 +104,8 @@ export const moveItemEmpty = (
     movedRangeWidgets.length === 0 &&
     movedWidget.x >= 0 &&
     movedWidget.y >= 0 &&
-    movedWidget.x + movedWidget.w - 1 < 5 &&
-    movedWidget.y + movedWidget.h - 1 < 3
+    movedWidget.x + movedWidget.w - 1 < gridSize.w &&
+    movedWidget.y + movedWidget.h - 1 < gridSize.h
   ) {
     return true //빈 공간으로 이동할 수 있음
   }

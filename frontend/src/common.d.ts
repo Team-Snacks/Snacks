@@ -16,6 +16,7 @@ export interface WidgetType {
   data: JSON
 }
 export type Widgets = WidgetType[]
+export type WidgetDimension = Pick<WidgetType, 'x' | 'y' | 'w' | 'h'>
 
 export type Coordinate = {
   x: number
