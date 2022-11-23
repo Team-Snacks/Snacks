@@ -42,7 +42,10 @@ describe('Size와 Pos 사이', () => {
   test('Size + Pos', () => {
     expect(a.add(b)).toEqual(vec2(2, 2))
   })
-  test('Size == Pos', () => expect(a).toEqual(b))
+  test('Size == Pos', () => {
+    expect(a).toEqual(b)
+    expect(a.equal(b)).toBe(true)
+  })
 
   // @ts-expect-error
   test('Size.x는 없음', () => expect(a.x).toBeUndefined())
