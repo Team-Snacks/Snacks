@@ -4,7 +4,7 @@ import { Grid } from './Grid'
 import { Navigation as tmp } from './Navigation'
 import type { Story } from '@ladle/react'
 import React from 'react'
-import { layoutDummy } from 'Dummy'
+import { layoutDummy } from 'dummy'
 
 const tmpStyle: React.CSSProperties = {
   background: '#ffffaa',
