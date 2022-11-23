@@ -11,3 +11,8 @@ body:
     attributes:
       label: 목표 상황
       description: 개선 시 기대되는 점에 대해 설명.
+  - type: input
+    attributes:
+      label: 노션 페이지
+      description: 연결된 노션 페이지 주소를 입력해주세요.
+      placeholder: notion.so
