@@ -29,50 +29,66 @@ describe('cartesianProduct', () => {
 })
 
 describe('range', () => {
-  test.each([
-    { end: 5, expected: [0, 1, 2, 3, 4] },
-    { end: 0, expected: [] },
-    { end: -3, expected: [] },
-  ])('range($end) -> [$expected]', ({ end, expected }) =>
-    expect(range(end)).toEqual(expected)
+  type Range = {
+    start: number
+    end: number
+    step: number
+    expected: number[]
+  }
+
+  test.each`
+    end   | expected
+    ${5}  | ${[0, 1, 2, 3, 4]}
+    ${0}  | ${[]}
+    ${-3} | ${[]}
+  `(
+    'range($end) -> $expected',
+    ({ end, expected }: Omit<Range, 'start' | 'step'>) =>
+      expect(range(end)).toEqual(expected)
   )
 
-  test.each([
-    { start: 0, end: 5, expected: [0, 1, 2, 3, 4] },
-    { start: 1, end: 5, expected: [1, 2, 3, 4] },
-    { start: 5, end: -5, expected: [] },
-    { start: -2, end: 2, expected: [-2, -1, 0, 1] },
-  ])('range($start, $end) -> [$expected]', ({ start, end, expected }) =>
-    expect(range(start, end)).toEqual(expected)
+  test.each`
+    start | end   | expected
+    ${0}  | ${5}  | ${[0, 1, 2, 3, 4]}
+    ${1}  | ${5}  | ${[1, 2, 3, 4]}
+    ${5}  | ${-5} | ${[]}
+    ${-2} | ${2}  | ${[-2, -1, 0, 1]}
+  `(
+    'range($start, $end) -> [$expected]',
+    ({ start, end, expected }: Omit<Range, 'step'>) =>
+      expect(range(start, end)).toEqual(expected)
   )
 
-  test.each([
-    { start: 0, end: 5, step: 2, expected: [0, 2, 4] },
-    { start: 1, end: 5, step: 2, expected: [1, 3] },
-    { start: 5, end: -5, step: 2, expected: [] },
-    { start: -2, end: 2, step: 2, expected: [-2, 0] },
-  ])(
+  test.each`
+    start | end   | step | expected
+    ${0}  | ${5}  | ${2} | ${[0, 2, 4]}
+    ${1}  | ${5}  | ${2} | ${[1, 3]}
+    ${5}  | ${-5} | ${2} | ${[]}
+    ${-2} | ${2}  | ${2} | ${[-2, 0]}
+  `(
     'range($start, $end, $step) -> [$expected]',
-    ({ start, end, step, expected }) =>
+    ({ start, end, step, expected }: Range) =>
       expect(range(start, end, step)).toEqual(expected)
   )
 })
 
 describe('replicate', () => {
-  test.each([{ fn: () => 3, expected: [3, 3, 3] }])(
-    'replicate(3, $fn) -> [$expected]',
-    ({ fn, expected }) => expect(replicate(3, fn)).toEqual(expected)
+  type Replicate<T> = {
+    fn: () => T
+    expected: [T, T, T]
+  }
+  test.each`
+    fn                | expected
+    ${() => 3}        | ${[3, 3, 3]}
+    ${() => 'string'} | ${['string', 'string', 'string']}
+  `('replicate(3, $fn) -> [$expected]', <T>({ fn, expected }: Replicate<T>) =>
+    expect(replicate(3, fn)).toEqual(expected)
   )
 
-  test.each([{ fn: () => 'string', expected: ['string', 'string', 'string'] }])(
-    'replicate(3, $fn) -> [$expected]',
-    ({ fn, expected }) => expect(replicate(3, fn)).toEqual(expected)
-  )
-
-  test.each(
-    // prettier-ignore
-    [{ fn: () => [1, 2, 3], expected: [[1, 2, 3], [1, 2, 3], [1, 2, 3]] }]
-  )('replicate(3, $fn) -> [$expected]', ({ fn, expected }) => {
+  test.each`
+    fn                 | expected
+    ${() => [1, 2, 3]} | ${[[1, 2, 3], [1, 2, 3], [1, 2, 3]]}
+  `('replicate(3, $fn) -> [$expected]', <T>({ fn, expected }: Replicate<T>) => {
     const gen = replicate(3, fn)
     expect(gen).toEqual(expected)
 
