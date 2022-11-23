@@ -14,7 +14,7 @@ export class Vec2 {
   neg() {
     return new Vec2(-this.v[0], -this.v[1])
   }
-  equal(other: Vec2): boolean {
+  eq(other: Vec2): boolean {
     return this.v[0] === other.v[0] && this.v[1] === other.v[1]
   }
   add(other: Vec2) {

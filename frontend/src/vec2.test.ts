@@ -44,7 +44,7 @@ describe('Size와 Pos 사이', () => {
   })
   test('Size == Pos', () => {
     expect(a).toEqual(b)
-    expect(a.equal(b)).toBe(true)
+    expect(a.eq(b)).toBe(true)
   })
 
   // @ts-expect-error
