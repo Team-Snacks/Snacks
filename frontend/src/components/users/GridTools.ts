@@ -1,24 +1,24 @@
-import { Footer } from '@mantine/core'
 import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
-import { widget } from 'components/widgets/widgets.stories'
+
 import { cartesianProduct, range, replicate } from 'utils'
+import { pos, Pos, size, Size, vec2, Vec2 } from 'vec2'
 
 export const gridSize = { w: 5, h: 3 } as const
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
 export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) =>
-  makePermutation({ x, y }, { x: x + w, y: y + h })
+  makePermutation(pos(x, y), pos(x, y).add(size(w, h)))
 
 //prettier-ignore
-export const makePermutation = (start: Coordinate, end: Coordinate) =>
-  cartesianProduct(range(start.x, end.x), range(start.y, end.y))
+export const makePermutation = (start: Vec2, end: Vec2) =>
+  cartesianProduct(range(start.v[0], end.v[0]), range(start.v[1], end.v[1]))
     .map(([x, y]) => ({ x, y }))
 
 //해당 좌표 범위 내에 존재하고 있는 위젯들의 배열을 반환 [완료][tools]
 export const coordinateRangeWidgets = (
   widgets: Widgets,
-  start: Coordinate,
-  end: Coordinate
+  start: Vec2,
+  end: Vec2
 ) => {
   const permutation = makePermutation(start, end)
 
@@ -58,21 +58,15 @@ export const makeGridCoordinates = (widgets: Widgets) => {
 //위젯을 교환할 수 있는지 여부를 확인해 교환할 위젯 또는 false를 반환. [완료][주기능]
 export const moveItemSwap = (
   widget: WidgetType,
-  cursorPosition: Coordinate,
+  cursorPosition: Vec2,
   widgets: Widgets
 ) => {
   //1. cursorPosition를 통해 교환할 위젯을 찾는다. 이동하려는 좌표에 위치하고, w h 크기가 같아야 함.
   //2. 조건이 맞으면 교환할 위젯을 반환, 실패하면 false
   const swapRange = coordinateRangeWidgets(
     widgets,
-    {
-      x: widget.x + cursorPosition.x,
-      y: widget.y + cursorPosition.y,
-    },
-    {
-      x: widget.x + widget.w + cursorPosition.x,
-      y: widget.y + widget.h + cursorPosition.y,
-    }
+    pos(widget.x, widget.y).add(cursorPosition),
+    pos(widget.x, widget.y).add(size(widget.w, widget.h)).add(cursorPosition)
   ).filter(ele => ele.uuid !== widget.uuid)
   if (
     swapRange.length === 1 &&
@@ -97,8 +91,8 @@ export const movableToEmpty = (
 
   const movedRangeWidgets = coordinateRangeWidgets(
     widgets,
-    { x: movedWidget.x, y: movedWidget.y },
-    { x: movedWidget.x + movedWidget.w, y: movedWidget.y + movedWidget.h }
+    pos(movedWidget.x, movedWidget.y),
+    pos(movedWidget.x, movedWidget.y).add(size(movedWidget.w, movedWidget.h))
   ).filter(ele => ele.uuid !== widget.uuid)
 
   return (
