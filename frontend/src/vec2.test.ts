@@ -19,11 +19,13 @@ describe.each(['Vec2', 'Pos', 'Size'] as Create[])('%s 메소드', type => {
   const cons = create(type)
   const a = cons(1, 2)
   const b = cons(3, 4)
+  const decimal = cons(1.7, 2.3)
 
   test('neg', () => expect(a.neg()).toEqual(cons(-1, -2)))
 
   test('add', () => expect(a.add(b)).toEqual(cons(4, 6)))
   test('sub', () => expect(a.sub(b)).toEqual(cons(-2, -2)))
+  test('round', () => expect(decimal.round()).toEqual(cons(2, 2)))
 
   describe('mul', () => {
     test(`with Vec2`, () => expect(a.mul(b)).toEqual(cons(3, 8)))

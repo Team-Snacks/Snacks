@@ -14,6 +14,9 @@ export class Vec2 {
   neg() {
     return new Vec2(-this.v[0], -this.v[1])
   }
+  round() {
+    return new Vec2(Math.round(this.v[0]), Math.round(this.v[1]))
+  }
   eq(other: Vec2): boolean {
     return this.v[0] === other.v[0] && this.v[1] === other.v[1]
   }
@@ -23,6 +26,7 @@ export class Vec2 {
   sub(other: Vec2) {
     return new Vec2(this.v[0] - other.v[0], this.v[1] - other.v[1])
   }
+
   /**
    * @example
    * vec2(1, 2).mul(3, 4) // => vec2(3, 8)
