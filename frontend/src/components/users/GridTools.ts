@@ -80,13 +80,13 @@ export const moveItemSwap = (
 //빈 곳으로 위젯을 이동할 지 여부를 반환한다 [완료] [주기능]
 export const movableToEmpty = (
   widget: WidgetType,
-  cursorPosition: Coordinate,
+  cursorPosition: Vec2,
   widgets: Widgets
 ) => {
   let movedWidget: WidgetType = {
     ...widget,
-    x: widget.x + cursorPosition.x,
-    y: widget.y + cursorPosition.y,
+    x: widget.x + cursorPosition.v[0],
+    y: widget.y + cursorPosition.v[1],
   }
 
   const movedRangeWidgets = coordinateRangeWidgets(
