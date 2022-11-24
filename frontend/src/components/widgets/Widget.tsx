@@ -15,8 +15,12 @@ export const Widget = ({
   const style = {
     // transform: CSS.Transform.toString(transform), //이동 모션과 관련된 부분
     // transition, //전환 동작과 관련된 부분 https://docs.dndkit.com/presets/sortable/usesortable#transition-1
-    gridColumn: `${widget.x + 1 + '/' + (widget.w + widget.x + 1)}`,
-    gridRow: `${widget.y + 1 + '/' + (widget.h + widget.y + 1)}`,
+    gridColumn: `${
+      widget.pos.v[0] + 1 + '/' + (widget.pos.v[0] + widget.size.v[0] + 1)
+    }`,
+    gridRow: `${
+      widget.pos.v[1] + 1 + '/' + (widget.pos.v[1] + widget.size.v[1] + 1)
+    }`,
     border: 'solid 1px black',
   }
   const selectWidget = () => {

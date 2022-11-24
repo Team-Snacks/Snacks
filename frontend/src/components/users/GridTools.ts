@@ -1,4 +1,4 @@
-import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
+import { WidgetDimension, Widgets, WidgetType } from 'common'
 
 import { cartesianProduct, range, replicate } from 'utils'
 import { pos, size, Vec2 } from 'vec2'
@@ -6,8 +6,8 @@ import { pos, size, Vec2 } from 'vec2'
 export const gridSize = pos(5, 3)
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
-export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) =>
-  makePermutation(pos(x, y), pos(x, y).add(size(w, h)))
+export const makeWidgetCoordinates = ({ pos, size }: WidgetDimension) =>
+  makePermutation(pos, pos.add(size))
 
 //prettier-ignore
 export const makePermutation = (start: Vec2, end: Vec2) =>
@@ -27,7 +27,7 @@ export const coordinateRangeWidgets = (
     const indexCoords = makeWidgetCoordinates(ele)
     permutation.forEach(perEle => {
       indexCoords.forEach(indexEle => {
-        if (indexEle.v[0] === perEle.v[0] && indexEle.v[1] === perEle.v[1]) {
+        if (indexEle.eq(perEle)) {
           widgetList.push(ele)
         }
       })
@@ -65,14 +65,10 @@ export const moveItemSwap = (
   //2. 조건이 맞으면 교환할 위젯을 반환, 실패하면 false
   const swapRange = coordinateRangeWidgets(
     widgets,
-    pos(widget.x, widget.y).add(cursorPosition),
-    pos(widget.x, widget.y).add(size(widget.w, widget.h)).add(cursorPosition)
+    widget.pos.add(cursorPosition),
+    widget.pos.add(widget.size).add(cursorPosition)
   ).filter(ele => ele.uuid !== widget.uuid)
-  if (
-    swapRange.length === 1 &&
-    swapRange[0].w === widget.w &&
-    swapRange[0].h === widget.h
-  ) {
+  if (swapRange.length === 1 && swapRange[0].size.eq(widget.size)) {
     return widgets.find(ele => ele.uuid === swapRange[0].uuid) ?? null
   }
   return null
@@ -85,21 +81,19 @@ export const movableToEmpty = (
 ) => {
   let movedWidget: WidgetType = {
     ...widget,
-    x: widget.x + cursorPosition.v[0],
-    y: widget.y + cursorPosition.v[1],
+    pos: widget.pos.add(cursorPosition),
   }
-
   const movedRangeWidgets = coordinateRangeWidgets(
     widgets,
-    pos(movedWidget.x, movedWidget.y),
-    pos(movedWidget.x, movedWidget.y).add(size(movedWidget.w, movedWidget.h))
+    movedWidget.pos,
+    movedWidget.pos.add(movedWidget.size)
   ).filter(ele => ele.uuid !== widget.uuid)
 
   return (
     movedRangeWidgets.length === 0 &&
-    movedWidget.x >= 0 &&
-    movedWidget.y >= 0 &&
-    movedWidget.x + movedWidget.w - 1 < gridSize.v[0] &&
-    movedWidget.y + movedWidget.h - 1 < gridSize.v[1]
+    movedWidget.pos.v[0] >= 0 &&
+    movedWidget.pos.v[1] >= 0 &&
+    movedWidget.pos.v[0] + movedWidget.size.v[0] - 1 < gridSize.v[0] &&
+    movedWidget.pos.v[1] + movedWidget.size.v[1] - 1 < gridSize.v[1]
   )
 }

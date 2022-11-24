@@ -1,7 +1,7 @@
 import { DndContext, DragEndEvent, DragMoveEvent } from '@dnd-kit/core'
 import { rectSwappingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { Widget } from 'components/widgets/Widget'
-import { Coordinate, Widgets } from 'common'
+import { Widgets } from 'common'
 import { createRef, LegacyRef, useState } from 'react'
 import { gridSize, movableToEmpty, moveItemSwap } from './GridTools'
 import { pos, size } from 'vec2'
@@ -43,18 +43,15 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
   const moveItem = (index: number) => {
     //빈 공간일 경우
     if (movableToEmpty(widgets[index], cursorPosition, widgets) !== false) {
-      widgets[index].x += cursorPosition.v[0]
-      widgets[index].y += cursorPosition.v[1]
+      widgets[index].pos = widgets[index].pos.add(cursorPosition)
       return
     }
     //swap할 수 있는 경우
     const swapWidget = moveItemSwap(widgets[index], cursorPosition, widgets)
     if (swapWidget !== null) {
-      const swapCoords: Coordinate = { x: swapWidget.x, y: swapWidget.y }
-      swapWidget.x = widgets[index].x
-      swapWidget.y = widgets[index].y
-      widgets[index].x = swapCoords.x
-      widgets[index].y = swapCoords.y
+      const swapCoords = swapWidget.pos
+      swapWidget.pos = widgets[index].pos
+      widgets[index].pos = swapCoords
       return
     }
     console.log('이동불가') //불가능
