@@ -32,7 +32,7 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
         gridRef.current.offsetWidth,
         gridRef.current.offsetHeight
       )
-      setCursorPosition(eventPosition.div(offsetSize.div(gridSize)).round())
+      setCursorPosition(eventPosition.div(offsetSize).mul(gridSize).round())
     }
     //delta값에 얼마나 움직였는지 정보가 담겨있고
     //이걸 그리드 사이즈에 대한 비율로 나눠서 어느 정도 이동했는지 좌표를 구한다

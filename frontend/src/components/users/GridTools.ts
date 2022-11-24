@@ -3,7 +3,7 @@ import { WidgetDimension, Widgets, WidgetType } from 'common'
 import { cartesianProduct, range, replicate } from 'utils'
 import { pos, size, Vec2 } from 'vec2'
 
-export const gridSize = pos(5, 3)
+export const gridSize = size(5, 3)
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
 export const makeWidgetCoordinates = ({ pos, size }: WidgetDimension) =>

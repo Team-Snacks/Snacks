@@ -22,7 +22,7 @@ test.each(
   // prettier-ignore
   [{ start: pos(0, 0 ), end: pos(1, 1), res: [mock[0]] },
   { start: pos(0, 0), end: pos(2, 2), res: [mock[0], mock[1], mock[2], mock[4]] },
-  { start: pos(2, 2), end: pos(3,3), res: []}]
+  { start: pos(2, 2), end: pos(3, 3), res: []}]
 )('coordinateRangeWidgets($start, $end) -> [$res]', ({ start, end, res }) =>
   expect(coordinateRangeWidgets(mock, start, end)).toEqual(res)
 )
@@ -55,6 +55,6 @@ test.each([
   { item: mock[2], pos: pos(2, 0), res: true },
   { item: mock[3], pos: pos(0, -1), res: true },
   { item: mock[4], pos: pos(1, 0), res: true },
-])('isMovableToEmpty($item, $pos,, mock) -> [$res]', ({ item, pos, res }) =>
+])('isMovableToEmpty($item, $pos, mock) -> [$res]', ({ item, pos, res }) =>
   expect(isMovableToEmpty(item, pos, mock)).toEqual(res)
 )
