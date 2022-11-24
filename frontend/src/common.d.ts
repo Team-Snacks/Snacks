@@ -1,3 +1,5 @@
+import { Pos, Size, Vec2 } from 'vec2'
+
 export type Email = string
 export type Identifier = string | Email
 
@@ -9,16 +11,9 @@ export interface Credential {
 export interface WidgetType {
   uuid: string
   name: string
-  x: number
-  y: number
-  w: number
-  h: number
+  pos: Vec2
+  size: Vec2
   data: JSON
 }
 export type Widgets = WidgetType[]
-export type WidgetDimension = Pick<WidgetType, 'x' | 'y' | 'w' | 'h'>
-
-export type Coordinate = {
-  x: number
-  y: number
-}
+export type WidgetDimension = Pick<WidgetType, 'pos' | 'size'>
