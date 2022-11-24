@@ -3,7 +3,7 @@ import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
 import { cartesianProduct, range, replicate } from 'utils'
 import { pos, size, Vec2 } from 'vec2'
 
-export const gridSize = { w: 5, h: 3 } as const
+export const gridSize = pos(5, 3)
 
 //해당 위젯이 차지하고 있는 좌표 배열을 반환 [완료][tools]
 export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) =>
@@ -37,8 +37,8 @@ export const coordinateRangeWidgets = (
 }
 //위젯들을 기반으로 위젯이 채워진 좌표계를 만듦 [완료][tools]
 export const makeGridCoordinates = (widgets: Widgets) => {
-  const rows = () => replicate(gridSize.h, () => ({ uuid: 'empty' }))
-  const result = replicate(gridSize.w, rows)
+  const rows = () => replicate(gridSize.v[1], () => ({ uuid: 'empty' }))
+  const result = replicate(gridSize.v[0], rows)
 
   widgets.forEach(ele => {
     const eleCoordinate = makeWidgetCoordinates(ele)
@@ -99,7 +99,7 @@ export const movableToEmpty = (
     movedRangeWidgets.length === 0 &&
     movedWidget.x >= 0 &&
     movedWidget.y >= 0 &&
-    movedWidget.x + movedWidget.w - 1 < gridSize.w &&
-    movedWidget.y + movedWidget.h - 1 < gridSize.h
+    movedWidget.x + movedWidget.w - 1 < gridSize.v[0] &&
+    movedWidget.y + movedWidget.h - 1 < gridSize.v[1]
   )
 }
