@@ -4,21 +4,22 @@ import { Widget } from 'components/widgets/Widget'
 import { Coordinate, Widgets } from 'common'
 import { createRef, LegacyRef, useState } from 'react'
 import { gridSize, movableToEmpty, moveItemSwap } from './GridTools'
+import { pos, size } from 'vec2'
 
 export const Grid = ({ widgets }: { widgets: Widgets }) => {
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
+  const [cursorPosition, setCursorPosition] = useState(pos(0, 0))
   const gridRef: LegacyRef<HTMLDivElement> = createRef()
   const tmpStyle: React.CSSProperties = {
     background: '#aaffaa',
     display: 'inline-grid',
     width: '100%',
     height: '80vh',
-    gridTemplateColumns: `repeat(${gridSize.w}, 1fr)`,
+    gridTemplateColumns: `repeat(${gridSize.v[0]}, 1fr)`,
     gridGap: 10,
   }
   //state cursorPosition을 기반으로 위젯을 이동한다 [완료][핸들러]
   const handleDragEnd = (event: DragEndEvent) => {
-    if (cursorPosition.x !== 0 || cursorPosition.y !== 0) {
+    if (cursorPosition.v[0] !== 0 || cursorPosition.v[1] !== 0) {
       const index = widgets.findIndex(item => item.uuid === event.active.id)
       moveItem(index)
     }
@@ -26,14 +27,12 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
   //드래그 중의 포인터 움직임을 State에 저장한다 [완료][핸들러]
   const handleDragMove = (event: DragMoveEvent) => {
     if (gridRef.current) {
-      setCursorPosition({
-        x: Math.round(
-          event.delta.x / (gridRef.current.offsetWidth / gridSize.w)
-        ),
-        y: Math.round(
-          event.delta.y / (gridRef.current.offsetHeight / gridSize.h)
-        ),
-      })
+      const eventPosition = pos(event.delta.x, event.delta.y)
+      const offsetSize = size(
+        gridRef.current.offsetWidth,
+        gridRef.current.offsetHeight
+      )
+      setCursorPosition(eventPosition.div(offsetSize.div(gridSize)).round())
     }
     //delta값에 얼마나 움직였는지 정보가 담겨있고
     //이걸 그리드 사이즈에 대한 비율로 나눠서 어느 정도 이동했는지 좌표를 구한다
@@ -44,8 +43,8 @@ export const Grid = ({ widgets }: { widgets: Widgets }) => {
   const moveItem = (index: number) => {
     //빈 공간일 경우
     if (movableToEmpty(widgets[index], cursorPosition, widgets) !== false) {
-      widgets[index].x += cursorPosition.x
-      widgets[index].y += cursorPosition.y
+      widgets[index].x += cursorPosition.v[0]
+      widgets[index].y += cursorPosition.v[1]
       return
     }
     //swap할 수 있는 경우
