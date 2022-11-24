@@ -1,7 +1,7 @@
 import { Coordinate, WidgetDimension, Widgets, WidgetType } from 'common'
 
 import { cartesianProduct, range, replicate } from 'utils'
-import { pos, Pos, size, Size, vec2, Vec2 } from 'vec2'
+import { pos, size, Vec2 } from 'vec2'
 
 export const gridSize = { w: 5, h: 3 } as const
 
@@ -12,7 +12,7 @@ export const makeWidgetCoordinates = ({ x, y, w, h }: WidgetDimension) =>
 //prettier-ignore
 export const makePermutation = (start: Vec2, end: Vec2) =>
   cartesianProduct(range(start.v[0], end.v[0]), range(start.v[1], end.v[1]))
-    .map(([x, y]) => ({ x, y }))
+    .map(([x, y]) => (pos(x, y)))
 
 //해당 좌표 범위 내에 존재하고 있는 위젯들의 배열을 반환 [완료][tools]
 export const coordinateRangeWidgets = (
@@ -27,7 +27,7 @@ export const coordinateRangeWidgets = (
     const indexCoords = makeWidgetCoordinates(ele)
     permutation.forEach(perEle => {
       indexCoords.forEach(indexEle => {
-        if (indexEle.x === perEle.x && indexEle.y === perEle.y) {
+        if (indexEle.v[0] === perEle.v[0] && indexEle.v[1] === perEle.v[1]) {
           widgetList.push(ele)
         }
       })
@@ -43,7 +43,7 @@ export const makeGridCoordinates = (widgets: Widgets) => {
   widgets.forEach(ele => {
     const eleCoordinate = makeWidgetCoordinates(ele)
     eleCoordinate.forEach(
-      eleEle => (result[eleEle.x][eleEle.y] = { uuid: ele.uuid })
+      eleEle => (result[eleEle.v[0]][eleEle.v[1]] = { uuid: ele.uuid })
     )
   })
   return result
