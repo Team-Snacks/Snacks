@@ -1,5 +1,6 @@
 import { Button, Paper, Stack, Text } from '@mantine/core'
 import { Logo } from 'components/common'
+import { Link } from 'react-router-dom'
 import { CredentialInput } from './CredentialInput'
 
 export const Credential = CredentialInput
@@ -14,7 +15,9 @@ export const Login = () => (
 export const TryRegister = () => (
   <>
     <Text>아직 계정이 없으신가요?</Text>
-    <Button variant='default'>회원가입</Button>
+    <Link to='/auth'>
+      <Button variant='default'>회원가입</Button>
+    </Link>
   </>
 )
 
